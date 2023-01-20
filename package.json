@@ -1,0 +1,48 @@
+{
+  "name": "check-compiler",
+  "version": "1.0.0-alpha",
+  "description": "Schema validation rule compiler for JS.",
+  "author": "Andriy Kornatskyy",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf tsconfig.tsbuildinfo dist *.tgz"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "homepage": "https://github.com/akornatskyy/check-compiler-js",
+  "bugs": {
+    "url": "https://github.com/akornatskyy/check-compiler-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akornatskyy/check-compiler-js.git"
+  },
+  "keywords": [
+    "check",
+    "compiler",
+    "rules",
+    "validation"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.6",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.9.5"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": false,
+    "printWidth": 80
+  }
+}
