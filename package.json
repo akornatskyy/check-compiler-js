@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "clean": "rimraf tsconfig.tsbuildinfo dist *.tgz"
+    "clean": "rimraf tsconfig.tsbuildinfo dist *.tgz",
+    "test": "jest"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,14 +30,18 @@
     "node": ">=16.0.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/__tests__"
   ],
   "exports": {
     ".": "./dist/index.js"
   },
   "devDependencies": {
+    "@types/jest": "^29.4.0",
     "@types/node": "^18.14.6",
+    "jest": "^29.5.0",
     "rimraf": "^3.0.2",
+    "ts-jest": "^29.0.5",
     "typescript": "^4.9.5"
   },
   "prettier": {
@@ -44,5 +49,22 @@
     "trailingComma": "all",
     "bracketSpacing": false,
     "printWidth": 80
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!**/__tests__",
+      "!**/dist"
+    ],
+    "modulePathIgnorePatterns": [
+      "dist",
+      "tsconfig.*"
+    ],
+    "testPathIgnorePatterns": [
+      "node_modules/"
+    ],
+    "transform": {
+      "\\.ts$": "ts-jest"
+    }
   }
 }
