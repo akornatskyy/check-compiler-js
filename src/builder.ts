@@ -6,12 +6,15 @@ export interface RuleBuilder {
 }
 
 export interface Builder {
+  readonly locations: string[];
   build<T>(rule: Rule<T>, location?: string): string;
   addViolation(v: Violation): string;
 }
 
 export class DefaultBuilder implements Builder {
   private readonly rules: Record<string, RuleBuilder | undefined> = {};
+
+  readonly locations: string[] = [];
 
   constructor(rules: RuleBuilder[]) {
     for (const r of rules) {
@@ -27,14 +30,62 @@ export class DefaultBuilder implements Builder {
       return '';
     }
 
+    if (location !== undefined) {
+      this.locations.push(
+        join(location, this.locations[this.locations.length - 1]),
+      );
+    }
+
     const src = b.build(this, rule, location);
+    if (location !== undefined) {
+      this.locations.pop();
+    }
+
     return src;
   }
 
   addViolation(violation: Violation): string {
     const {reason, message} = violation;
-    return `errors.push({reason: "${reason}", message: ${JSON.stringify(
-      message,
-    )}});`;
+    let location = this.locations[this.locations.length - 1];
+    if (violation.location) {
+      location = join(violation.location, location);
+    }
+
+    return `errors.push({${
+      location
+        ? `location: ${
+            location.startsWith('`') ? location : JSON.stringify(location)
+          }, `
+        : ''
+    }reason: "${reason}", message: ${JSON.stringify(message)}});`;
   }
+}
+
+function join(name: string, location: string | undefined) {
+  if (!location) {
+    return name;
+  }
+
+  if (name.startsWith('`')) {
+    name = name.substring(1);
+    if (!name.startsWith('[')) {
+      name = '.' + name;
+    }
+
+    if (location.endsWith('`')) {
+      return location.substring(0, location.length - 1) + name;
+    } else {
+      return '`' + location + name;
+    }
+  }
+
+  if (!name.startsWith('[')) {
+    name = '.' + name;
+  }
+
+  if (location.endsWith('`')) {
+    return location.substring(0, location.length - 1) + name + '`';
+  }
+
+  return location + name;
 }
