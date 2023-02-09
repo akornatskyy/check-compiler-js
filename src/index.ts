@@ -6,6 +6,7 @@ import {objectRuleBuilder} from './rules/object';
 import {stringRuleBuilder} from './rules/string';
 import {Rule} from './types';
 
+export {Check} from './compiler';
 export {Rule, Violation} from './types';
 
 const COMPILER = new Compiler(
