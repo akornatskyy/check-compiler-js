@@ -5,7 +5,7 @@ const id: Rule<string> = {
   type: 'string',
   min: 8,
   max: 8,
-  pattern: /^[a-z]{8}$/,
+  pattern: /^[a-z]+$/,
 };
 const name: Rule<string> = {type: 'string', min: 1, max: 63};
 const key = name;
