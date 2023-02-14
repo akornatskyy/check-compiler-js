@@ -1,7 +1,7 @@
 {
   "name": "check-compiler",
-  "version": "1.0.0-alpha",
-  "description": "Schema validation rule compiler for JS.",
+  "version": "1.0.0",
+  "description": "A typescript-first schema rule compiler and validation library.",
   "author": "Andriy Kornatskyy",
   "license": "MIT",
   "scripts": {
@@ -24,6 +24,7 @@
     "check",
     "compiler",
     "rules",
+    "schema",
     "validation"
   ],
   "engines": {
