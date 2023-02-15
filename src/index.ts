@@ -18,6 +18,6 @@ const COMPILER = new Compiler(
   ]),
 );
 
-export function compile<T>(rule: Rule<T>): Check<T> {
-  return COMPILER.compile(rule);
+export function compile<T>(rule: Rule<T>, location?: string): Check<T> {
+  return COMPILER.compile(rule, location);
 }
