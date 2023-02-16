@@ -20,7 +20,7 @@ const memory: Rule<number | null> = {
   type: 'number',
   nullable: true,
   min: 0,
-  max: 32768,
+  max: 32_768,
 };
 
 type ResourceMap = {
@@ -136,13 +136,13 @@ describe('rules playground', () => {
 
   it('images', () => {
     expect(cc(images, [])).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required field cannot be left empty.",
-    "reason": "array empty",
-  },
-]
-`);
+      [
+        {
+          "message": "Required field cannot be left empty.",
+          "reason": "array empty",
+        },
+      ]
+    `);
     expect(cc(images, ['test:latest', 'test:stable'])).toMatchInlineSnapshot(
       `[]`,
     );
@@ -151,14 +151,14 @@ describe('rules playground', () => {
   it('labels', () => {
     expect(cc(labels, [])).toMatchInlineSnapshot(`[]`);
     expect(cc(labels, [{key: '', value: ''}])).toMatchInlineSnapshot(`
-[
-  {
-    "location": "[0].key",
-    "message": "Required field cannot be left blank.",
-    "reason": "string blank",
-  },
-]
-`);
+      [
+        {
+          "location": "[0].key",
+          "message": "Required field cannot be left blank.",
+          "reason": "string blank",
+        },
+      ]
+    `);
   });
 
   it('create instance input', () => {

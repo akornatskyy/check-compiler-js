@@ -8,7 +8,10 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
 
   const {min, max, nullable} = rule;
   const src: string[] = [];
-  if (!nullable) {
+  if (nullable) {
+    src.push(`
+    if (value !== undefined && value !== null) {`);
+  } else {
     src.push(`
     if (value === null) {
       ${builder.addViolation({
@@ -17,9 +20,6 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
       })}
     }
     else {`);
-  } else {
-    src.push(`
-    if (value !== undefined && value !== null) {`);
   }
 
   src.push(`
@@ -48,19 +48,7 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
   }
 
   if (min !== undefined) {
-    if (max !== undefined) {
-      if (min > max) {
-        throw new Error('Number min is greater than max.');
-      }
-
-      src.push(`
-      else if (value < ${min} || value > ${max}) {
-        ${builder.addViolation({
-          reason: 'number range',
-          message: `The value must fall within the range ${min} - ${max}.`,
-        })}
-      }`);
-    } else {
+    if (max === undefined) {
       if (min === 0) {
         src.push(`
       else if (value < ${min}) {
@@ -78,6 +66,18 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
         })}
       }`);
       }
+    } else {
+      if (min > max) {
+        throw new Error('Number min is greater than max.');
+      }
+
+      src.push(`
+      else if (value < ${min} || value > ${max}) {
+        ${builder.addViolation({
+          reason: 'number range',
+          message: `The value must fall within the range ${min} - ${max}.`,
+        })}
+      }`);
     }
   } else if (max !== undefined) {
     src.push(`

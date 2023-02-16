@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-null */
+/* eslint-disable unicorn/no-useless-undefined */
 import {compile} from '../..';
 import {Builder} from '../../builder';
 import {Rule, Violation} from '../../types';
@@ -21,13 +23,13 @@ describe('rule number', () => {
     const rule: Rule<number> = {type: 'number'};
 
     expect(cc(rule, null)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required field cannot be null.",
-    "reason": "field not null",
-  },
-]
-`);
+      [
+        {
+          "message": "Required field cannot be null.",
+          "reason": "field not null",
+        },
+      ]
+    `);
   });
 
   it('number', () => {
@@ -35,29 +37,29 @@ describe('rule number', () => {
 
     expect(cc(rule, 1)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a number.",
-    "reason": "number",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a number.",
+          "reason": "number",
+        },
+      ]
+    `);
     expect(cc(rule, '')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a number.",
-    "reason": "number",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a number.",
+          "reason": "number",
+        },
+      ]
+    `);
     expect(cc(rule, Number.NaN)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a number.",
-    "reason": "number",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a number.",
+          "reason": "number",
+        },
+      ]
+    `);
   });
 
   it('number null', () => {
@@ -67,13 +69,13 @@ describe('rule number', () => {
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, null)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, '')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a number or null.",
-    "reason": "number null",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a number or null.",
+          "reason": "number null",
+        },
+      ]
+    `);
   });
 
   it('integer', () => {
@@ -81,13 +83,13 @@ describe('rule number', () => {
 
     expect(cc(rule, 10)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 1.5)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be an integer.",
-    "reason": "integer",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be an integer.",
+          "reason": "integer",
+        },
+      ]
+    `);
   });
 
   it('number min greater error', () => {
@@ -102,21 +104,21 @@ describe('rule number', () => {
     expect(cc(rule, 1)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 10)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 0)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "The value must fall within the range 1 - 10.",
-    "reason": "number range",
-  },
-]
-`);
+      [
+        {
+          "message": "The value must fall within the range 1 - 10.",
+          "reason": "number range",
+        },
+      ]
+    `);
     expect(cc(rule, 11)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "The value must fall within the range 1 - 10.",
-    "reason": "number range",
-  },
-]
-`);
+      [
+        {
+          "message": "The value must fall within the range 1 - 10.",
+          "reason": "number range",
+        },
+      ]
+    `);
   });
 
   it('number positive', () => {
@@ -124,13 +126,13 @@ describe('rule number', () => {
 
     expect(cc(rule, 2)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, -1)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a positive number.",
-    "reason": "number positive",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a positive number.",
+          "reason": "number positive",
+        },
+      ]
+    `);
   });
 
   it('number min', () => {
@@ -138,13 +140,13 @@ describe('rule number', () => {
 
     expect(cc(rule, 2)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 0)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be greater or equal to 1.",
-    "reason": "number min",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be greater or equal to 1.",
+          "reason": "number min",
+        },
+      ]
+    `);
   });
 
   it('number max', () => {
@@ -152,13 +154,13 @@ describe('rule number', () => {
 
     expect(cc(rule, 9)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 11)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Exceeds maximum allowed value of 10.",
-    "reason": "number max",
-  },
-]
-`);
+      [
+        {
+          "message": "Exceeds maximum allowed value of 10.",
+          "reason": "number max",
+        },
+      ]
+    `);
   });
 });
 

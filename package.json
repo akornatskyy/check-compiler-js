@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf tsconfig.tsbuildinfo dist *.tgz",
+    "lint": "eslint . --format stylish --ext .ts",
     "test": "jest"
   },
   "main": "dist/index.js",
@@ -40,6 +41,17 @@
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "@types/node": "^18.15.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "eslint": "^8.35.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-no-null": "^1.0.2",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-unicorn": "^46.0.0",
     "jest": "^29.5.0",
     "rimraf": "^3.0.2",
     "ts-jest": "^29.0.5",
@@ -66,6 +78,32 @@
     ],
     "transform": {
       "\\.ts$": "ts-jest"
+    }
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint",
+      "no-null"
+    ],
+    "ignorePatterns": [
+      "dist/",
+      "node_modules/"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "google",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:import/typescript",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:unicorn/recommended",
+      "prettier"
+    ],
+    "rules": {
+      "require-jsdoc": "off",
+      "unicorn/prevent-abbreviations": "off"
     }
   }
 }

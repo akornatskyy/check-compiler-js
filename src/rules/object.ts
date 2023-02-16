@@ -8,7 +8,10 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
 
   const {properties, required, nullable} = rule;
   const src: string[] = [];
-  if (!nullable) {
+  if (nullable) {
+    src.push(`
+    if (value !== undefined && value !== null) {`);
+  } else {
     src.push(`
     if (value === null) {
       ${builder.addViolation({
@@ -17,9 +20,6 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
       })}
     }
     else {`);
-  } else {
-    src.push(`
-    if (value !== undefined && value !== null) {`);
   }
 
   src.push(`
@@ -37,9 +37,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
               },
         )}
       }
-      else {`);
-
-  src.push(`
+      else {
         const {${Object.keys(properties).join(', ')}} = __o;`);
 
   if (required) {

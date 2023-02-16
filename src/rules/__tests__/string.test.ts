@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-null */
+/* eslint-disable unicorn/no-useless-undefined */
 import {compile} from '../..';
 import {Builder} from '../../builder';
 import {Rule, Violation} from '../../types';
@@ -21,13 +23,13 @@ describe('rule string', () => {
     const rule: Rule<string> = {type: 'string'};
 
     expect(cc(rule, null)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required field cannot be null.",
-    "reason": "field not null",
-  },
-]
-`);
+      [
+        {
+          "message": "Required field cannot be null.",
+          "reason": "field not null",
+        },
+      ]
+    `);
   });
 
   it('string', () => {
@@ -35,21 +37,21 @@ describe('rule string', () => {
 
     expect(cc(rule, '')).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a string.",
-    "reason": "string",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a string.",
+          "reason": "string",
+        },
+      ]
+    `);
     expect(cc(rule, 1)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a string.",
-    "reason": "string",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a string.",
+          "reason": "string",
+        },
+      ]
+    `);
   });
 
   it('string null', () => {
@@ -59,13 +61,13 @@ describe('rule string', () => {
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, null)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 1)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a string or null.",
-    "reason": "string null",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a string or null.",
+          "reason": "string null",
+        },
+      ]
+    `);
   });
 
   it('string min negative error', () => {
@@ -79,13 +81,13 @@ describe('rule string', () => {
 
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, '')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required field cannot be left blank.",
-    "reason": "string blank",
-  },
-]
-`);
+      [
+        {
+          "message": "Required field cannot be left blank.",
+          "reason": "string blank",
+        },
+      ]
+    `);
   });
 
   it('string min greater error', () => {
@@ -99,13 +101,13 @@ describe('rule string', () => {
 
     expect(cc(rule, 'ab')).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "The length must be exactly 2 characters.",
-    "reason": "string exact",
-  },
-]
-`);
+      [
+        {
+          "message": "The length must be exactly 2 characters.",
+          "reason": "string exact",
+        },
+      ]
+    `);
   });
 
   it('string range', () => {
@@ -114,21 +116,21 @@ describe('rule string', () => {
     expect(cc(rule, 'ab')).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 'abcd')).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be between 2 and 4 characters in length.",
-    "reason": "string range",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be between 2 and 4 characters in length.",
+          "reason": "string range",
+        },
+      ]
+    `);
     expect(cc(rule, 'abcde')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be between 2 and 4 characters in length.",
-    "reason": "string range",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be between 2 and 4 characters in length.",
+          "reason": "string range",
+        },
+      ]
+    `);
   });
 
   it('string min', () => {
@@ -136,13 +138,13 @@ describe('rule string', () => {
 
     expect(cc(rule, 'ab')).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a minimum of 2 characters in length.",
-    "reason": "string min",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a minimum of 2 characters in length.",
+          "reason": "string min",
+        },
+      ]
+    `);
   });
 
   it('string max negative error', () => {
@@ -156,13 +158,13 @@ describe('rule string', () => {
 
     expect(cc(rule, 'abc')).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 'abcd')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Exceeds maximum length of 3 characters.",
-    "reason": "string max",
-  },
-]
-`);
+      [
+        {
+          "message": "Exceeds maximum length of 3 characters.",
+          "reason": "string max",
+        },
+      ]
+    `);
   });
 
   it('string pattern', () => {
@@ -170,13 +172,13 @@ describe('rule string', () => {
 
     expect(cc(rule, 'abc')).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, '1234')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to match validation pattern.",
-    "reason": "string pattern",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to match validation pattern.",
+          "reason": "string pattern",
+        },
+      ]
+    `);
   });
 });
 

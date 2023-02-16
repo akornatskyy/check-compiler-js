@@ -8,7 +8,10 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
 
   const {min, max, pattern, nullable} = rule;
   const src: string[] = [];
-  if (!nullable) {
+  if (nullable) {
+    src.push(`
+    if (value !== undefined && value !== null) {`);
+  } else {
     src.push(`
     if (value === null) {
       ${builder.addViolation({
@@ -17,9 +20,6 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       })}
     }
     else {`);
-  } else {
-    src.push(`
-    if (value !== undefined && value !== null) {`);
   }
 
   src.push(`
@@ -52,7 +52,15 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       }`);
     }
 
-    if (max !== undefined) {
+    if (max === undefined) {
+      src.push(`
+      else if (value.length < ${min}) {
+        ${builder.addViolation({
+          reason: 'string min',
+          message: `Required to be a minimum of ${min} characters in length.`,
+        })}
+      }`);
+    } else {
       if (min > max) {
         throw new Error('String min length is greater than max.');
       }
@@ -74,14 +82,6 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
         })}
       }`);
       }
-    } else {
-      src.push(`
-      else if (value.length < ${min}) {
-        ${builder.addViolation({
-          reason: 'string min',
-          message: `Required to be a minimum of ${min} characters in length.`,
-        })}
-      }`);
     }
   } else if (max !== undefined) {
     if (max < 0) {

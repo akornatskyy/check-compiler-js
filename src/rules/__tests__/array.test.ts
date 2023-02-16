@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-null */
+/* eslint-disable unicorn/no-useless-undefined */
 import {compile} from '../..';
 import {Builder} from '../../builder';
 import {Rule, Violation} from '../../types';
@@ -25,13 +27,13 @@ describe('rule array', () => {
     const rule: Rule<number[]> = {type: 'array', items: {type: 'number'}};
 
     expect(cc(rule, null)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required field cannot be null.",
-    "reason": "field not null",
-  },
-]
-`);
+      [
+        {
+          "message": "Required field cannot be null.",
+          "reason": "field not null",
+        },
+      ]
+    `);
   });
 
   it('array', () => {
@@ -39,21 +41,21 @@ describe('rule array', () => {
 
     expect(cc(rule, [1])).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be an array.",
-    "reason": "array",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be an array.",
+          "reason": "array",
+        },
+      ]
+    `);
     expect(cc(rule, '')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be an array.",
-    "reason": "array",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be an array.",
+          "reason": "array",
+        },
+      ]
+    `);
   });
 
   it('array null', () => {
@@ -67,13 +69,13 @@ describe('rule array', () => {
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, null)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, '')).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be an array or null.",
-    "reason": "array null",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be an array or null.",
+          "reason": "array null",
+        },
+      ]
+    `);
   });
 
   it('array min negative error', () => {
@@ -95,13 +97,13 @@ describe('rule array', () => {
 
     expect(cc(rule, [1])).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, [])).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required field cannot be left empty.",
-    "reason": "array empty",
-  },
-]
-`);
+      [
+        {
+          "message": "Required field cannot be left empty.",
+          "reason": "array empty",
+        },
+      ]
+    `);
   });
 
   it('array min greater error', () => {
@@ -125,13 +127,13 @@ describe('rule array', () => {
 
     expect(cc(rule, [1, 2])).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, [1])).toMatchInlineSnapshot(`
-[
-  {
-    "message": "The array length must be exactly 2 items.",
-    "reason": "array exact",
-  },
-]
-`);
+      [
+        {
+          "message": "The array length must be exactly 2 items.",
+          "reason": "array exact",
+        },
+      ]
+    `);
   });
 
   it('array range', () => {
@@ -145,21 +147,21 @@ describe('rule array', () => {
     expect(cc(rule, [1, 2])).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, [1, 2, 3, 4])).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, [1])).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be between 2 and 4 items in length.",
-    "reason": "array range",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be between 2 and 4 items in length.",
+          "reason": "array range",
+        },
+      ]
+    `);
     expect(cc(rule, [1, 2, 3, 4, 5])).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be between 2 and 4 items in length.",
-    "reason": "array range",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be between 2 and 4 items in length.",
+          "reason": "array range",
+        },
+      ]
+    `);
   });
 
   it('array min', () => {
@@ -171,13 +173,13 @@ describe('rule array', () => {
 
     expect(cc(rule, [1, 2])).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, [1])).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be a minimum of 2 items in length.",
-    "reason": "array min",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be a minimum of 2 items in length.",
+          "reason": "array min",
+        },
+      ]
+    `);
   });
 
   it('array max negative error', () => {
@@ -199,13 +201,13 @@ describe('rule array', () => {
 
     expect(cc(rule, [1, 2, 3])).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, [1, 2, 3, 4])).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Exceeds maximum length of 3 items.",
-    "reason": "array max",
-  },
-]
-`);
+      [
+        {
+          "message": "Exceeds maximum length of 3 items.",
+          "reason": "array max",
+        },
+      ]
+    `);
   });
 
   it('array items', () => {
@@ -216,19 +218,19 @@ describe('rule array', () => {
 
     expect(cc(rule, [1, 2, 3])).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, [-1, -2])).toMatchInlineSnapshot(`
-[
-  {
-    "location": "[0]",
-    "message": "Required to be a positive number.",
-    "reason": "number positive",
-  },
-  {
-    "location": "[1]",
-    "message": "Required to be a positive number.",
-    "reason": "number positive",
-  },
-]
-`);
+      [
+        {
+          "location": "[0]",
+          "message": "Required to be a positive number.",
+          "reason": "number positive",
+        },
+        {
+          "location": "[1]",
+          "message": "Required to be a positive number.",
+          "reason": "number positive",
+        },
+      ]
+    `);
   });
 });
 

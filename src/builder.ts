@@ -67,16 +67,14 @@ function join(name: string, location: string | undefined) {
   }
 
   if (name.startsWith('`')) {
-    name = name.substring(1);
+    name = name.slice(1);
     if (!name.startsWith('[')) {
       name = '.' + name;
     }
 
-    if (location.endsWith('`')) {
-      return location.substring(0, location.length - 1) + name;
-    } else {
-      return '`' + location + name;
-    }
+    return location.endsWith('`')
+      ? location.slice(0, Math.max(0, location.length - 1)) + name
+      : '`' + location + name;
   }
 
   if (!name.startsWith('[')) {
@@ -84,7 +82,7 @@ function join(name: string, location: string | undefined) {
   }
 
   if (location.endsWith('`')) {
-    return location.substring(0, location.length - 1) + name + '`';
+    return location.slice(0, Math.max(0, location.length - 1)) + name + '`';
   }
 
   return location + name;

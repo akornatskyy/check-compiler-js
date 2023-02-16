@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable unicorn/no-null */
+/* eslint-disable unicorn/no-useless-undefined */
 import {compile} from '../..';
 import {Builder} from '../../builder';
 import {Rule, Violation} from '../../types';
@@ -25,13 +28,13 @@ describe('rule object', () => {
     const rule: Rule<{}> = {type: 'object', properties: {}};
 
     expect(cc(rule, null)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required object cannot be null.",
-    "reason": "object not null",
-  },
-]
-`);
+      [
+        {
+          "message": "Required object cannot be null.",
+          "reason": "object not null",
+        },
+      ]
+    `);
   });
 
   it('object', () => {
@@ -39,21 +42,21 @@ describe('rule object', () => {
 
     expect(cc(rule, {})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be an object.",
-    "reason": "object",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be an object.",
+          "reason": "object",
+        },
+      ]
+    `);
     expect(cc(rule, 1)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be an object.",
-    "reason": "object",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be an object.",
+          "reason": "object",
+        },
+      ]
+    `);
   });
 
   it('object null', () => {
@@ -67,13 +70,13 @@ describe('rule object', () => {
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, null)).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, 1)).toMatchInlineSnapshot(`
-[
-  {
-    "message": "Required to be an object or null.",
-    "reason": "object null",
-  },
-]
-`);
+      [
+        {
+          "message": "Required to be an object or null.",
+          "reason": "object null",
+        },
+      ]
+    `);
   });
 
   it('required', () => {
@@ -94,19 +97,19 @@ describe('rule object', () => {
     };
 
     expect(cc(rule, {})).toMatchInlineSnapshot(`
-[
-  {
-    "location": "a",
-    "message": "Required field cannot be left blank.",
-    "reason": "required",
-  },
-  {
-    "location": "b",
-    "message": "Required field cannot be left blank.",
-    "reason": "required",
-  },
-]
-`);
+      [
+        {
+          "location": "a",
+          "message": "Required field cannot be left blank.",
+          "reason": "required",
+        },
+        {
+          "location": "b",
+          "message": "Required field cannot be left blank.",
+          "reason": "required",
+        },
+      ]
+    `);
   });
 
   it('required properties', () => {
@@ -121,19 +124,19 @@ describe('rule object', () => {
 
     expect(cc(rule, {a: 1, b: 2})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {a: 0, b: 1})).toMatchInlineSnapshot(`
-[
-  {
-    "location": "a",
-    "message": "Required to be greater or equal to 1.",
-    "reason": "number min",
-  },
-  {
-    "location": "b",
-    "message": "Required to be greater or equal to 2.",
-    "reason": "number min",
-  },
-]
-`);
+      [
+        {
+          "location": "a",
+          "message": "Required to be greater or equal to 1.",
+          "reason": "number min",
+        },
+        {
+          "location": "b",
+          "message": "Required to be greater or equal to 2.",
+          "reason": "number min",
+        },
+      ]
+    `);
   });
 
   it('optional properties', () => {
@@ -147,19 +150,19 @@ describe('rule object', () => {
 
     expect(cc(rule, {a: 1, b: 2})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {a: 0, b: 1})).toMatchInlineSnapshot(`
-[
-  {
-    "location": "a",
-    "message": "Required to be greater or equal to 1.",
-    "reason": "number min",
-  },
-  {
-    "location": "b",
-    "message": "Required to be greater or equal to 2.",
-    "reason": "number min",
-  },
-]
-`);
+      [
+        {
+          "location": "a",
+          "message": "Required to be greater or equal to 1.",
+          "reason": "number min",
+        },
+        {
+          "location": "b",
+          "message": "Required to be greater or equal to 2.",
+          "reason": "number min",
+        },
+      ]
+    `);
   });
 
   it('value property', () => {
@@ -172,14 +175,14 @@ describe('rule object', () => {
 
     expect(cc(rule, {value: 1})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {value: 0})).toMatchInlineSnapshot(`
-[
-  {
-    "location": "value",
-    "message": "Required to be greater or equal to 1.",
-    "reason": "number min",
-  },
-]
-`);
+      [
+        {
+          "location": "value",
+          "message": "Required to be greater or equal to 1.",
+          "reason": "number min",
+        },
+      ]
+    `);
   });
 });
 
