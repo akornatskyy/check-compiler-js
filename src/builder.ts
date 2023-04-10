@@ -1,4 +1,4 @@
-import {Rule, Violation} from './types';
+import { Rule, Violation } from './types';
 
 export interface RuleBuilder {
   types: string[];
@@ -32,7 +32,7 @@ export class DefaultBuilder implements Builder {
 
     if (location !== undefined) {
       this.locations.push(
-        join(location, this.locations[this.locations.length - 1]),
+        join(location, this.locations.at(-1)),
       );
     }
 
@@ -46,7 +46,7 @@ export class DefaultBuilder implements Builder {
 
   addViolation(violation: Violation): string {
     const {reason, message} = violation;
-    let location = this.locations[this.locations.length - 1];
+    let location = this.locations.at(-1);
     if (violation.location) {
       location = join(violation.location, location);
     }
