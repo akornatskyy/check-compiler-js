@@ -184,6 +184,27 @@ describe('rule object', () => {
       ]
     `);
   });
+
+  it('keyword property', () => {
+    const rule: Rule<{in: number[]}> = {
+      type: 'object',
+      properties: {
+        in: {type: 'array', items: {type: 'integer'}},
+      },
+      required: ['in'],
+    };
+
+    expect(cc(rule, {in: [1]})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "in",
+          "message": "Required field cannot be left blank.",
+          "reason": "required",
+        },
+      ]
+    `);
+  });
 });
 
 function cc<T>(rule: Rule<T>, input: unknown) {

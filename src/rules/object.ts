@@ -38,18 +38,21 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
         )}
       }
       else {
-        const {${Object.keys(properties).join(', ')}} = __o;`);
+        const {${Object.keys(properties)
+          .map((name) => (isKeyword(name) ? `${name}: _${name}` : name))
+          .join(', ')}} = __o;`);
 
   if (required) {
     src.push(`
         let ok = true;`);
     for (const r of required) {
-      const name = String(r);
+      const location = String(r);
+      const name = prefixIfKeyword(location);
       src.push(`
         if (${name} === undefined || ${name} === null) {
           ok = false;
           ${builder.addViolation({
-            location: name,
+            location,
             reason: 'required',
             message: 'Required field cannot be left blank.',
           })}
@@ -68,7 +71,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
   { /* ${name} */`);
       if (name !== 'value') {
         src.push(`
-    const value = ${name};`);
+    const value = ${prefixIfKeyword(name)};`);
       }
 
       src.push(`${inner}
@@ -92,3 +95,11 @@ export const objectRuleBuilder: RuleBuilder = {
   types: ['object'],
   build: buildRuleObject,
 };
+
+function isKeyword(name: string) {
+  return name === 'in';
+}
+
+function prefixIfKeyword(name: string) {
+  return isKeyword(name) ? '_' + name : name;
+}
