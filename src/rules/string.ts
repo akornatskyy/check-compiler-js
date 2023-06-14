@@ -42,7 +42,7 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       throw new Error('Negative min string length.');
     }
 
-    if (min > 0) {
+    if (min === 1) {
       src.push(`
       else if (value.length === 0) {
         ${builder.addViolation({

@@ -76,7 +76,7 @@ describe('rule string', () => {
     expect(() => cc(rule, '')).toThrow(/Negative min/);
   });
 
-  it('string blank', () => {
+  it('string blank when min equals one', () => {
     const rule: Rule<string> = {type: 'string', min: 1};
 
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`[]`);
