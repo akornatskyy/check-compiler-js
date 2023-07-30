@@ -77,6 +77,20 @@ describe('rule string', () => {
   });
 
   it('string blank', () => {
+    const rule: Rule<string> = {type: 'string', min: 2};
+
+    expect(cc(rule, 'ab')).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "Required field cannot be left blank.",
+          "reason": "string blank",
+        },
+      ]
+    `);
+  });
+
+  it('string blank when min equals one', () => {
     const rule: Rule<string> = {type: 'string', min: 1};
 
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`[]`);
