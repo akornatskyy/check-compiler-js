@@ -49,7 +49,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
       const location = String(r);
       const name = prefixIfKeyword(location);
       src.push(`
-        if (${name} === undefined || ${name} === null) {
+        if (${name} === undefined) {
           ok = false;
           ${builder.addViolation({
             location,
@@ -74,7 +74,21 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     const value = ${prefixIfKeyword(name)};`);
       }
 
-      src.push(`${inner}
+      const optional = !required || !(name in required);
+      if (optional) {
+        src.push(`
+    if (value !== undefined) {
+      `);
+      }
+
+      src.push(inner);
+
+      if (optional) {
+        src.push(`
+    } /* if (value !== undefined) */`);
+      }
+
+      src.push(`
   } /* ${name} */`);
     }
   }

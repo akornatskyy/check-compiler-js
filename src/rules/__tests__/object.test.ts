@@ -165,6 +165,87 @@ describe('rule object', () => {
     `);
   });
 
+  it('undefined/null with required', () => {
+    const rule: Rule<{a: number; b: number | null}> = {
+      type: 'object',
+      properties: {
+        a: {type: 'integer', min: 1},
+        b: {type: 'number', nullable: true, min: 2},
+      },
+      required: ['a', 'b'],
+    };
+
+    expect(cc(rule, {a: 1, b: 2})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "a",
+          "message": "Required field cannot be left blank.",
+          "reason": "required",
+        },
+        {
+          "location": "b",
+          "message": "Required field cannot be left blank.",
+          "reason": "required",
+        },
+      ]
+    `);
+    expect(cc(rule, {a: null, b: null})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "a",
+          "message": "Required field cannot be null.",
+          "reason": "field not null",
+        },
+      ]
+    `);
+  });
+
+  it('undefined/null with no required', () => {
+    const rule: Rule<{a: number; b: number | null}> = {
+      type: 'object',
+      properties: {
+        a: {type: 'integer', min: 1},
+        b: {type: 'number', nullable: true, min: 2},
+      },
+      required: [],
+    };
+
+    expect(cc(rule, {a: 1, b: 2})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {a: null, b: null})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "a",
+          "message": "Required field cannot be null.",
+          "reason": "field not null",
+        },
+      ]
+    `);
+  });
+
+  it('undefined/null with optional', () => {
+    const rule: Rule<{a?: number; b?: number | null}> = {
+      type: 'object',
+      properties: {
+        a: {type: 'integer', min: 1},
+        b: {type: 'number', nullable: true, min: 2},
+      },
+    };
+
+    expect(cc(rule, {a: 1, b: 2})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {a: null, b: null})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "a",
+          "message": "Required field cannot be null.",
+          "reason": "field not null",
+        },
+      ]
+    `);
+  });
+
   it('value property', () => {
     const rule: Rule<{value?: number}> = {
       type: 'object',
