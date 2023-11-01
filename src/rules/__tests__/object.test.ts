@@ -17,7 +17,6 @@ describe('rule object', () => {
     const rule: Rule<{} | null> = {
       type: 'object',
       nullable: true,
-      properties: {},
     };
 
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`[]`);
@@ -25,7 +24,7 @@ describe('rule object', () => {
   });
 
   it('object not null', () => {
-    const rule: Rule<{}> = {type: 'object', properties: {}};
+    const rule: Rule<{}> = {type: 'object'};
 
     expect(cc(rule, null)).toMatchInlineSnapshot(`
       [
@@ -38,7 +37,7 @@ describe('rule object', () => {
   });
 
   it('object', () => {
-    const rule: Rule<{}> = {type: 'object', properties: {}};
+    const rule: Rule<{}> = {type: 'object'};
 
     expect(cc(rule, {})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, undefined)).toMatchInlineSnapshot(`
@@ -63,7 +62,6 @@ describe('rule object', () => {
     const rule: Rule<{} | null> = {
       type: 'object',
       nullable: true,
-      properties: {},
     };
 
     expect(cc(rule, {})).toMatchInlineSnapshot(`[]`);

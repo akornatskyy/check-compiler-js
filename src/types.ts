@@ -19,19 +19,25 @@ export type RuleArray<T> = {
 };
 
 export type Properties<T> = {
-  [K in keyof T]-?: Rule<T[K]>;
+  [K in keyof T as string extends K ? never : K]-?: Rule<T[K]>;
 };
 
-export type RequiredProperties<T> = {
-  [K in keyof T]-?: undefined extends T[K] ? never : K;
-}[keyof T];
+export type RequiredProperties<T> = keyof {
+  [K in keyof T as string extends K
+    ? never
+    : undefined extends T[K]
+    ? never
+    : K]: K;
+};
 
 export type Schema<T> = {
   type: 'object';
-  properties: Properties<T>;
-} & ([RequiredProperties<T>] extends [never]
-  ? {required?: undefined}
-  : {required: Readonly<RequiredProperties<T>[]>});
+} & (keyof Properties<T> extends never
+  ? {properties?: undefined}
+  : {properties: Properties<T>}) &
+  (RequiredProperties<T> extends never
+    ? {required?: undefined}
+    : {required: Readonly<RequiredProperties<T>[]>});
 
 export type Nullable<T> = null extends T
   ? {nullable: true}

@@ -37,12 +37,18 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
               },
         )}
       }
-      else {
-        const {${Object.keys(properties)
+      else {`);
+  if (properties) {
+    const keys = Object.keys(properties);
+    if (keys.length > 0) {
+      src.push(`
+        const {${keys
           .map((name) => (isKeyword(name) ? `${name}: _${name}` : name))
           .join(', ')}} = __o;`);
+    }
+  }
 
-  if (required) {
+  if (required && required.length > 0) {
     src.push(`
         let ok = true;`);
     for (const r of required) {
@@ -64,36 +70,38 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
         if (ok) {`);
   }
 
-  for (const [name, value] of Object.entries(properties)) {
-    const inner = builder.build(value as Rule<unknown>, name);
-    if (inner) {
-      src.push(`
+  if (properties) {
+    for (const [name, value] of Object.entries(properties)) {
+      const inner = builder.build(value as Rule<unknown>, name);
+      if (inner) {
+        src.push(`
   { /* ${name} */`);
-      if (name !== 'value') {
-        src.push(`
+        if (name !== 'value') {
+          src.push(`
     const value = ${prefixIfKeyword(name)};`);
-      }
+        }
 
-      const optional = !required || !(name in required);
-      if (optional) {
-        src.push(`
+        const optional = !required || !(name in required);
+        if (optional) {
+          src.push(`
     if (value !== undefined) {
       `);
-      }
+        }
 
-      src.push(inner);
+        src.push(inner);
 
-      if (optional) {
-        src.push(`
+        if (optional) {
+          src.push(`
     } /* if (value !== undefined) */`);
-      }
+        }
 
-      src.push(`
+        src.push(`
   } /* ${name} */`);
+      }
     }
   }
 
-  if (required) {
+  if (required && required.length > 0) {
     src.push(`
         } /* if ok */`);
   }
