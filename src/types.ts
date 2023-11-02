@@ -37,7 +37,11 @@ export type Schema<T> = {
   : {properties: Properties<T>}) &
   (RequiredProperties<T> extends never
     ? {required?: undefined}
-    : {required: Readonly<RequiredProperties<T>[]>});
+    : {required: Readonly<RequiredProperties<T>[]>}) & {
+    patternProperties?: {
+      [pattern: string]: RuleNumber | RuleString | {type: 'array' | 'object'};
+    };
+  };
 
 export type Nullable<T> = null extends T
   ? {nullable: true}

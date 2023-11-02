@@ -101,6 +101,43 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     }
   }
 
+  const {patternProperties} = rule;
+  if (patternProperties) {
+    src.push(`
+  const __keys = Object.keys(value);
+  for (const __k of __keys) {`);
+    if (properties) {
+      const keys = Object.keys(properties);
+      if (keys.length > 0) {
+        src.push(`
+    if (${Object.keys(properties)
+      .map((p) => `__k === ${JSON.stringify(p)}`)
+      .join(' || ')}) {
+        continue;
+    }
+    `);
+      }
+    }
+
+    src.push(`
+    /* pattern properties */
+    `);
+    for (const [pattern, value] of Object.entries(patternProperties)) {
+      src.push(`
+    if (/${pattern}/.test(__k)) {
+      const value = __o[__k];
+
+      ${builder.build(value as Rule<unknown>, '`[${JSON.stringify(__k)}]`')}
+
+      continue;
+    }
+    `);
+    }
+
+    src.push(`
+  } /* for __keys */`);
+  }
+
   if (required && required.length > 0) {
     src.push(`
         } /* if ok */`);

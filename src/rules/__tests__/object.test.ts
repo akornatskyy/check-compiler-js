@@ -284,7 +284,35 @@ describe('rule object', () => {
       ]
     `);
   });
+
+  it('pattern properties nested', () => {
+    const rule: Rule<Input> = {
+      type: 'object',
+      properties: {
+        labels: {
+          type: 'object',
+          patternProperties: {
+            '^s': {type: 'string', min: 1},
+          },
+        },
+      },
+    };
+
+    expect(cc(rule, {labels: {s1: ''}})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "labels["s1"]",
+          "message": "Required field cannot be left blank.",
+          "reason": "string blank",
+        },
+      ]
+    `);
+    expect(cc(rule, {labels: {s: 'x'}})).toMatchInlineSnapshot(`[]`);
+  });
 });
+
+type Labels = {[key: string]: unknown};// & {x2: string};
+type Input = {labels?: Labels};
 
 function cc<T>(rule: Rule<T>, input: unknown) {
   const check = compile(rule);
