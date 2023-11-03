@@ -101,41 +101,81 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     }
   }
 
-  const {patternProperties} = rule;
+  const {minProperties, maxProperties, patternProperties} = rule;
+  if (minProperties || maxProperties || patternProperties) {
+    src.push(`
+  const __keys = Object.keys(value);`);
+  }
+
+  if (minProperties !== undefined && minProperties > 0) {
+    src.push(`
+  if (__keys.length < ${minProperties}) {
+    ${builder.addViolation({
+      reason: 'pattern object min properties',
+      message:
+        'The number of object properties must be greater ' +
+        `or equal to ${minProperties}.`,
+    })}
+  }
+  else {`);
+  }
+
+  if (maxProperties !== undefined) {
+    src.push(`
+    if (__keys.length > ${maxProperties}) {
+      ${builder.addViolation({
+        reason: 'pattern object max properties',
+        message:
+          'Exceeds maximum number of allowed object ' +
+          `properties ${maxProperties}.`,
+      })}
+    }
+    else {`);
+  }
+
   if (patternProperties) {
     src.push(`
-  const __keys = Object.keys(value);
-  for (const __k of __keys) {`);
+      for (const __k of __keys) {`);
     if (properties) {
       const keys = Object.keys(properties);
       if (keys.length > 0) {
         src.push(`
-    if (${Object.keys(properties)
-      .map((p) => `__k === ${JSON.stringify(p)}`)
-      .join(' || ')}) {
-        continue;
-    }
-    `);
+        if (${Object.keys(properties)
+          .map((p) => `__k === ${JSON.stringify(p)}`)
+          .join(' || ')}) {
+            continue;
+        }
+        `);
       }
     }
 
     src.push(`
-    /* pattern properties */
-    `);
+        /* pattern properties */
+      `);
     for (const [pattern, value] of Object.entries(patternProperties)) {
       src.push(`
-    if (/${pattern}/.test(__k)) {
-      const value = __o[__k];
+        if (/${pattern}/.test(__k)) {
+          const value = __o[__k];
 
-      ${builder.build(value as Rule<unknown>, '`[${JSON.stringify(__k)}]`')}
+          ${builder.build(value as Rule<unknown>, '`[${JSON.stringify(__k)}]`')}
 
-      continue;
-    }
-    `);
+          continue;
+        }
+        `);
     }
 
     src.push(`
-  } /* for __keys */`);
+      } /* for __keys */`);
+  }
+
+  if (maxProperties !== undefined) {
+    src.push(`
+    } /* if max properties */`);
+  }
+
+  if (minProperties !== undefined && minProperties > 0) {
+    src.push(`
+  } /* if min properties */`);
   }
 
   if (required && required.length > 0) {

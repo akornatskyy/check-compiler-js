@@ -285,6 +285,94 @@ describe('rule object', () => {
     `);
   });
 
+  it('min properties', () => {
+    const rule: Rule<Input> = {
+      type: 'object',
+      properties: {
+        labels: {
+          type: 'object',
+          patternProperties: {
+            '^s': {type: 'string'},
+          },
+          minProperties: 1,
+        },
+      },
+    };
+
+    expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "labels",
+          "message": "The number of object properties must be greater or equal to 1.",
+          "reason": "pattern object min properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {labels: {s: ''}})).toMatchInlineSnapshot(`[]`);
+  });
+
+  it('max properties', () => {
+    const rule: Rule<Input> = {
+      type: 'object',
+      properties: {
+        labels: {
+          type: 'object',
+          patternProperties: {
+            '^s': {type: 'string'},
+          },
+          maxProperties: 1,
+        },
+      },
+    };
+
+    expect(cc(rule, {labels: {s1: '', s2: ''}})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "labels",
+          "message": "Exceeds maximum number of allowed object properties 1.",
+          "reason": "pattern object max properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`[]`);
+  });
+
+  it('min max properties', () => {
+    const rule: Rule<Input> = {
+      type: 'object',
+      properties: {
+        labels: {
+          type: 'object',
+          patternProperties: {
+            '^s': {type: 'string'},
+          },
+          minProperties: 1,
+          maxProperties: 2,
+        },
+      },
+    };
+
+    expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "labels",
+          "message": "The number of object properties must be greater or equal to 1.",
+          "reason": "pattern object min properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {labels: {s1: '', s2: '', s3: ''}})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "labels",
+          "message": "Exceeds maximum number of allowed object properties 2.",
+          "reason": "pattern object max properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {labels: {s2: ''}})).toMatchInlineSnapshot(`[]`);
+  });
+
   it('pattern properties nested', () => {
     const rule: Rule<Input> = {
       type: 'object',

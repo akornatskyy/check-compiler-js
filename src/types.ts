@@ -41,6 +41,8 @@ export type Schema<T> = {
     patternProperties?: {
       [pattern: string]: RuleNumber | RuleString | {type: 'array' | 'object'};
     };
+    minProperties?: number;
+    maxProperties?: number;
   };
 
 export type Nullable<T> = null extends T
