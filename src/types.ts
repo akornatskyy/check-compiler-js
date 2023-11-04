@@ -43,6 +43,7 @@ export type Schema<T> = {
     };
     minProperties?: number;
     maxProperties?: number;
+    additionalProperties?: false;
   };
 
 export type Nullable<T> = null extends T

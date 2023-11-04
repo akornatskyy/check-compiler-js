@@ -101,8 +101,18 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     }
   }
 
-  const {minProperties, maxProperties, patternProperties} = rule;
-  if (minProperties || maxProperties || patternProperties) {
+  const {
+    minProperties,
+    maxProperties,
+    patternProperties,
+    additionalProperties,
+  } = rule;
+  if (
+    minProperties ||
+    maxProperties ||
+    patternProperties ||
+    additionalProperties
+  ) {
     src.push(`
   const __keys = Object.keys(value);`);
   }
@@ -133,7 +143,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     else {`);
   }
 
-  if (patternProperties) {
+  if (patternProperties || additionalProperties === false) {
     src.push(`
       for (const __k of __keys) {`);
     if (properties) {
@@ -149,19 +159,29 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
       }
     }
 
-    src.push(`
+    if (patternProperties) {
+      src.push(`
         /* pattern properties */
       `);
-    for (const [pattern, value] of Object.entries(patternProperties)) {
-      src.push(`
+      for (const [pattern, value] of Object.entries(patternProperties)) {
+        src.push(`
         if (/${pattern}/.test(__k)) {
           const value = __o[__k];
-
           ${builder.build(value as Rule<unknown>, '`[${JSON.stringify(__k)}]`')}
 
           continue;
         }
         `);
+      }
+    }
+
+    if (additionalProperties === false) {
+      src.push(`
+          ${builder.addViolation({
+            reason: 'object no additional properties',
+            message: `Required to not have any additional properties.`,
+            location: '`[${JSON.stringify(__k)}]`',
+          })}`);
     }
 
     src.push(`

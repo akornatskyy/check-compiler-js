@@ -397,6 +397,32 @@ describe('rule object', () => {
     `);
     expect(cc(rule, {labels: {s: 'x'}})).toMatchInlineSnapshot(`[]`);
   });
+
+  it('additional properties', () => {
+    const rule: Rule<Input> = {
+      type: 'object',
+      properties: {
+        labels: {
+          type: 'object',
+          patternProperties: {
+            '^s': {type: 'string'},
+          },
+          additionalProperties: false,
+        },
+      },
+    };
+
+    expect(cc(rule, {labels: {s: '', x: ''}})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "labels["x"]",
+          "message": "Required to not have any additional properties.",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {labels: {s: ''}})).toMatchInlineSnapshot(`[]`);
+  });
 });
 
 type Labels = {[key: string]: unknown};// & {x2: string};
