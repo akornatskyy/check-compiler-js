@@ -101,17 +101,30 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     }
   }
 
-  const {
-    minProperties,
-    maxProperties,
-    patternProperties,
-    additionalProperties,
-  } = rule;
+  const {minProperties} = rule;
+  if (minProperties !== undefined && minProperties < 0) {
+    throw new Error('Negative object min properties.');
+  }
+
+  const {maxProperties} = rule;
+  if (maxProperties !== undefined && maxProperties < 0) {
+    throw new Error('Negative object max properties.');
+  }
+
+  if (
+    minProperties !== undefined &&
+    maxProperties !== undefined &&
+    minProperties > maxProperties
+  ) {
+    throw new Error('Object min properties is greater max.');
+  }
+
+  const {patternProperties, additionalProperties} = rule;
   if (
     minProperties ||
     maxProperties ||
     patternProperties ||
-    additionalProperties
+    additionalProperties == false
   ) {
     src.push(`
   const __keys = Object.keys(value);`);

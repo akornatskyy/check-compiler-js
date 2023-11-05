@@ -311,6 +311,12 @@ describe('rule object', () => {
     expect(cc(rule, {labels: {s: ''}})).toMatchInlineSnapshot(`[]`);
   });
 
+  it('min properties negative', () => {
+    const rule: Rule<Labels> = {type: 'object', minProperties: -1};
+
+    expect(() => cc(rule, {})).toThrow(/min/);
+  });
+
   it('max properties', () => {
     const rule: Rule<Input> = {
       type: 'object',
@@ -335,6 +341,12 @@ describe('rule object', () => {
       ]
     `);
     expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`[]`);
+  });
+
+  it('max properties negative', () => {
+    const rule: Rule<Labels> = {type: 'object', maxProperties: -1};
+
+    expect(() => cc(rule, {})).toThrow(/max/);
   });
 
   it('min max properties', () => {
@@ -373,6 +385,16 @@ describe('rule object', () => {
     expect(cc(rule, {labels: {s2: ''}})).toMatchInlineSnapshot(`[]`);
   });
 
+  it('max properties greater max', () => {
+    const rule: Rule<Labels> = {
+      type: 'object',
+      minProperties: 1,
+      maxProperties: 0,
+    };
+
+    expect(() => cc(rule, {})).toThrow(/min.+greater/);
+  });
+
   it('pattern properties nested', () => {
     const rule: Rule<Input> = {
       type: 'object',
@@ -404,6 +426,29 @@ describe('rule object', () => {
       properties: {
         labels: {
           type: 'object',
+        },
+      },
+      additionalProperties: false,
+    };
+
+    expect(cc(rule, {x: 1})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "["x"]",
+          "message": "Required to not have any additional properties.",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {labels: {s: '', x: 1}})).toMatchInlineSnapshot(`[]`);
+  });
+
+  it('additional properties with pattern properties', () => {
+    const rule: Rule<Input> = {
+      type: 'object',
+      properties: {
+        labels: {
+          type: 'object',
           patternProperties: {
             '^s': {type: 'string'},
           },
@@ -425,7 +470,7 @@ describe('rule object', () => {
   });
 });
 
-type Labels = {[key: string]: unknown};// & {x2: string};
+type Labels = {[key: string]: unknown}; // & {x2: string};
 type Input = {labels?: Labels};
 
 function cc<T>(rule: Rule<T>, input: unknown) {
