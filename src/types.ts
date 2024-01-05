@@ -1,3 +1,7 @@
+export type RuleBoolean = {
+  type: 'boolean';
+};
+
 export type RuleNumber = {
   type: 'number' | 'integer';
   min?: number;
@@ -39,7 +43,11 @@ export type Schema<T> = {
     ? {required?: undefined}
     : {required: Readonly<RequiredProperties<T>[]>}) & {
     patternProperties?: {
-      [pattern: string]: RuleNumber | RuleString | {type: 'array' | 'object'};
+      [pattern: string]:
+        | RuleBoolean
+        | RuleNumber
+        | RuleString
+        | {type: 'array' | 'object'};
     };
     minProperties?: number;
     maxProperties?: number;
@@ -50,7 +58,9 @@ export type Nullable<T> = null extends T
   ? {nullable: true}
   : {nullable?: false};
 
-export type Rule<T> = (T extends number
+export type Rule<T> = (T extends boolean
+  ? RuleBoolean
+  : T extends number
   ? RuleNumber
   : T extends string
   ? RuleString

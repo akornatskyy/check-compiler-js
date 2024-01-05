@@ -1,6 +1,7 @@
 import {DefaultBuilder} from './builder';
 import {Check, Compiler} from './compiler';
 import {arrayRuleBuilder} from './rules/array';
+import {booleanRuleBuilder} from './rules/boolean';
 import {numberRuleBuilder} from './rules/number';
 import {objectRuleBuilder} from './rules/object';
 import {stringRuleBuilder} from './rules/string';
@@ -11,6 +12,7 @@ export {Rule, Violation} from './types';
 
 const COMPILER = new Compiler(
   new DefaultBuilder([
+    booleanRuleBuilder,
     numberRuleBuilder,
     stringRuleBuilder,
     objectRuleBuilder,
