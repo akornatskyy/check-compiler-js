@@ -43,7 +43,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     if (keys.length > 0) {
       src.push(`
         const {${keys
-          .map((name) => (isKeyword(name) ? `${name}: _${name}` : name))
+          .map((name) => (isReserved(name) ? `${name}: _${name}` : name))
           .join(', ')}} = __o;`);
     }
   }
@@ -53,7 +53,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
         let ok = true;`);
     for (const r of required) {
       const location = String(r);
-      const name = prefixIfKeyword(location);
+      const name = prefixIfReserved(location);
       src.push(`
         if (${name} === undefined) {
           ok = false;
@@ -75,11 +75,8 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
       const inner = builder.build(value as Rule<unknown>, name);
       if (inner) {
         src.push(`
-  { /* ${name} */`);
-        if (name !== 'value') {
-          src.push(`
-    const value = ${prefixIfKeyword(name)};`);
-        }
+  { /* ${name} */
+    const value = ${prefixIfReserved(name)};`);
 
         const optional = !required || !(name in required);
         if (optional) {
@@ -228,10 +225,10 @@ export const objectRuleBuilder: RuleBuilder = {
   build: buildRuleObject,
 };
 
-function isKeyword(name: string) {
-  return name === 'in';
+function isReserved(name: string) {
+  return name === 'in' || name === 'value';
 }
 
-function prefixIfKeyword(name: string) {
-  return isKeyword(name) ? '_' + name : name;
+function prefixIfReserved(name: string) {
+  return isReserved(name) ? '_' + name : name;
 }

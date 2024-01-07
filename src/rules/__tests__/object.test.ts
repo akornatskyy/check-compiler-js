@@ -421,6 +421,112 @@ describe('rule object', () => {
   });
 
   it('additional properties', () => {
+    const rule: Rule<{name: string; age: number}> = {
+      type: 'object',
+      properties: {
+        name: {type: 'string'},
+        age: {type: 'number'},
+      },
+      required: ['name'],
+      additionalProperties: false,
+    };
+
+    expect(cc(rule, {name: 'a', x: '123'})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "["x"]",
+          "message": "Required to not have any additional properties.",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {name: 'a', age: 45, x: '123'})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "["x"]",
+          "message": "Required to not have any additional properties.",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {name: 'a', age: 45})).toMatchInlineSnapshot(`[]`);
+  });
+
+  it('additional properties with value property', () => {
+    const rule: Rule<{name: string; value: string}> = {
+      type: 'object',
+      properties: {
+        name: {type: 'string'},
+        value: {type: 'string'},
+      },
+      required: ['name'],
+      additionalProperties: false,
+    };
+
+    expect(cc(rule, {name: 'a', x: 1})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "["x"]",
+          "message": "Required to not have any additional properties.",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {name: 'a', value: '1', x: 1})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "["x"]",
+          "message": "Required to not have any additional properties.",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {name: 'a', value: 'abc'})).toMatchInlineSnapshot(`[]`);
+  });
+
+  it('additional properties nested with value property', () => {
+    const rule: Rule<{name: string; value: {a: number}}> = {
+      type: 'object',
+      properties: {
+        name: {type: 'string'},
+        value: {
+          type: 'object',
+          properties: {
+            a: {type: 'number'},
+          },
+          required: [],
+          additionalProperties: false,
+        },
+      },
+      required: ['name'],
+    };
+
+    expect(cc(rule, {name: 'a', value: {x: 1}})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "value["x"]",
+          "message": "Required to not have any additional properties.",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {name: 'a', value: {a: 1, x: 2}})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "value["x"]",
+          "message": "Required to not have any additional properties.",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
+    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {name: 'a', x: 1})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {name: 'a', value: {a: 1}})).toMatchInlineSnapshot(`[]`);
+  });
+
+  it('additional properties with object', () => {
     const rule: Rule<Input> = {
       type: 'object',
       properties: {
