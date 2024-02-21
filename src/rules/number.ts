@@ -63,6 +63,7 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'number min',
           message: `Required to be greater or equal to ${min}.`,
+          args: {min},
         })}
       }`);
       }
@@ -76,6 +77,7 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'number range',
           message: `The value must fall within the range ${min} - ${max}.`,
+          args: {min, max},
         })}
       }`);
     }
@@ -85,6 +87,7 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
       ${builder.addViolation({
         reason: 'number max',
         message: `Exceeds maximum allowed value of ${max}.`,
+        args: {max},
       })}
     }`);
   }

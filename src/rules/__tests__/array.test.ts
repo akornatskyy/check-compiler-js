@@ -129,6 +129,9 @@ describe('rule array', () => {
     expect(cc(rule, [1])).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 2,
+          },
           "message": "The array length must be exactly 2 items.",
           "reason": "array exact",
         },
@@ -149,6 +152,10 @@ describe('rule array', () => {
     expect(cc(rule, [1])).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 4,
+            "min": 2,
+          },
           "message": "Required to be between 2 and 4 items in length.",
           "reason": "array range",
         },
@@ -157,6 +164,10 @@ describe('rule array', () => {
     expect(cc(rule, [1, 2, 3, 4, 5])).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 4,
+            "min": 2,
+          },
           "message": "Required to be between 2 and 4 items in length.",
           "reason": "array range",
         },
@@ -175,6 +186,9 @@ describe('rule array', () => {
     expect(cc(rule, [1])).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "min": 2,
+          },
           "message": "Required to be a minimum of 2 items in length.",
           "reason": "array min",
         },
@@ -203,6 +217,9 @@ describe('rule array', () => {
     expect(cc(rule, [1, 2, 3, 4])).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 3,
+          },
           "message": "Exceeds maximum length of 3 items.",
           "reason": "array max",
         },

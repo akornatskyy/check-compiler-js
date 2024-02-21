@@ -58,6 +58,7 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'array min',
           message: `Required to be a minimum of ${min} items in length.`,
+          args: {min},
         })}
       }`);
     } else {
@@ -71,6 +72,7 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'array exact',
           message: `The array length must be exactly ${max} items.`,
+          args: {max},
         })}
       }`);
       } else {
@@ -79,6 +81,7 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'array range',
           message: `Required to be between ${min} and ${max} items in length.`,
+          args: {min, max},
         })}
       }`);
       }
@@ -93,6 +96,7 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'array max',
           message: `Exceeds maximum length of ${max} items.`,
+          args: {max},
         })}
       }`);
   }

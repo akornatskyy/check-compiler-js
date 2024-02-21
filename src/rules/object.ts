@@ -135,6 +135,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
       message:
         'The number of object properties must be greater ' +
         `or equal to ${minProperties}.`,
+      args: {minProperties},
     })}
   }
   else {`);
@@ -148,6 +149,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
         message:
           'Exceeds maximum number of allowed object ' +
           `properties ${maxProperties}.`,
+        args: {maxProperties},
       })}
     }
     else {`);

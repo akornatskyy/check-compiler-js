@@ -47,7 +47,7 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length === 0) {
         ${builder.addViolation({
           reason: 'string blank',
-          message: `Required field cannot be left blank.`,
+          message: 'Required field cannot be left blank.',
         })}
       }`);
     }
@@ -58,6 +58,7 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'string min',
           message: `Required to be a minimum of ${min} characters in length.`,
+          args: {min},
         })}
       }`);
     } else {
@@ -71,6 +72,7 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'string exact',
           message: `The length must be exactly ${max} characters.`,
+          args: {max},
         })}
       }`);
       } else {
@@ -79,6 +81,7 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'string range',
           message: `Required to be between ${min} and ${max} characters in length.`,
+          args: {min, max},
         })}
       }`);
       }
@@ -93,6 +96,7 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
         ${builder.addViolation({
           reason: 'string max',
           message: `Exceeds maximum length of ${max} characters.`,
+          args: {max},
         })}
       }`);
   }
@@ -102,7 +106,7 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       else if (!${pattern}.test(value)) {
         ${builder.addViolation({
           reason: 'string pattern',
-          message: `Required to match validation pattern.`,
+          message: 'Required to match validation pattern.',
         })}
       }`);
   }

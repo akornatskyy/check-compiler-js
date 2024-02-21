@@ -118,3 +118,19 @@ export const assertResourceMap = makeAssetValid(
 const input: ResourceMap = {cpu: 1000, memory: 512};
 assertResourceMap(input);
 ```
+
+Violation details example:
+
+```json
+[
+  {
+    "location": "cpu",
+    "message": "The value must fall within the range 0 - 8000.",
+    "reason": "number range",
+    "args": {
+      "min": 0,
+      "max": 8000
+    }
+  }
+]
+```

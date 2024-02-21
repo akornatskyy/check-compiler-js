@@ -117,6 +117,9 @@ describe('rule string', () => {
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 2,
+          },
           "message": "The length must be exactly 2 characters.",
           "reason": "string exact",
         },
@@ -132,6 +135,10 @@ describe('rule string', () => {
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 4,
+            "min": 2,
+          },
           "message": "Required to be between 2 and 4 characters in length.",
           "reason": "string range",
         },
@@ -140,6 +147,10 @@ describe('rule string', () => {
     expect(cc(rule, 'abcde')).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 4,
+            "min": 2,
+          },
           "message": "Required to be between 2 and 4 characters in length.",
           "reason": "string range",
         },
@@ -154,6 +165,9 @@ describe('rule string', () => {
     expect(cc(rule, 'a')).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "min": 2,
+          },
           "message": "Required to be a minimum of 2 characters in length.",
           "reason": "string min",
         },
@@ -174,6 +188,9 @@ describe('rule string', () => {
     expect(cc(rule, 'abcd')).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 3,
+          },
           "message": "Exceeds maximum length of 3 characters.",
           "reason": "string max",
         },

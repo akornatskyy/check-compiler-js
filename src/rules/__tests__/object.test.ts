@@ -124,11 +124,17 @@ describe('rule object', () => {
     expect(cc(rule, {a: 0, b: 1})).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "min": 1,
+          },
           "location": "a",
           "message": "Required to be greater or equal to 1.",
           "reason": "number min",
         },
         {
+          "args": {
+            "min": 2,
+          },
           "location": "b",
           "message": "Required to be greater or equal to 2.",
           "reason": "number min",
@@ -150,11 +156,17 @@ describe('rule object', () => {
     expect(cc(rule, {a: 0, b: 1})).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "min": 1,
+          },
           "location": "a",
           "message": "Required to be greater or equal to 1.",
           "reason": "number min",
         },
         {
+          "args": {
+            "min": 2,
+          },
           "location": "b",
           "message": "Required to be greater or equal to 2.",
           "reason": "number min",
@@ -256,6 +268,9 @@ describe('rule object', () => {
     expect(cc(rule, {value: 0})).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "min": 1,
+          },
           "location": "value",
           "message": "Required to be greater or equal to 1.",
           "reason": "number min",
@@ -302,6 +317,9 @@ describe('rule object', () => {
     expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "minProperties": 1,
+          },
           "location": "labels",
           "message": "The number of object properties must be greater or equal to 1.",
           "reason": "pattern object min properties",
@@ -334,6 +352,9 @@ describe('rule object', () => {
     expect(cc(rule, {labels: {s1: '', s2: ''}})).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "maxProperties": 1,
+          },
           "location": "labels",
           "message": "Exceeds maximum number of allowed object properties 1.",
           "reason": "pattern object max properties",
@@ -367,6 +388,9 @@ describe('rule object', () => {
     expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "minProperties": 1,
+          },
           "location": "labels",
           "message": "The number of object properties must be greater or equal to 1.",
           "reason": "pattern object min properties",
@@ -376,6 +400,9 @@ describe('rule object', () => {
     expect(cc(rule, {labels: {s1: '', s2: '', s3: ''}})).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "maxProperties": 2,
+          },
           "location": "labels",
           "message": "Exceeds maximum number of allowed object properties 2.",
           "reason": "pattern object max properties",

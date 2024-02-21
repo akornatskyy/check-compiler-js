@@ -75,4 +75,5 @@ export type Violation = {
   reason: string;
   message: string;
   location?: string;
+  args?: {[key: string]: unknown};
 };

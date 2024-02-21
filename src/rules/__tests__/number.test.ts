@@ -106,6 +106,10 @@ describe('rule number', () => {
     expect(cc(rule, 0)).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 10,
+            "min": 1,
+          },
           "message": "The value must fall within the range 1 - 10.",
           "reason": "number range",
         },
@@ -114,6 +118,10 @@ describe('rule number', () => {
     expect(cc(rule, 11)).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 10,
+            "min": 1,
+          },
           "message": "The value must fall within the range 1 - 10.",
           "reason": "number range",
         },
@@ -142,6 +150,9 @@ describe('rule number', () => {
     expect(cc(rule, 0)).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "min": 1,
+          },
           "message": "Required to be greater or equal to 1.",
           "reason": "number min",
         },
@@ -156,6 +167,9 @@ describe('rule number', () => {
     expect(cc(rule, 11)).toMatchInlineSnapshot(`
       [
         {
+          "args": {
+            "max": 10,
+          },
           "message": "Exceeds maximum allowed value of 10.",
           "reason": "number max",
         },
