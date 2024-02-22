@@ -34,6 +34,17 @@ describe('rule object', () => {
         },
       ]
     `);
+
+    rule.messages = {'object not null': 'custom'};
+
+    expect(cc(rule, null)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "object not null",
+        },
+      ]
+    `);
   });
 
   it('object', () => {
@@ -56,6 +67,17 @@ describe('rule object', () => {
         },
       ]
     `);
+
+    rule.messages = {object: 'custom'};
+
+    expect(cc(rule, 1)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "object",
+        },
+      ]
+    `);
   });
 
   it('object null', () => {
@@ -71,6 +93,17 @@ describe('rule object', () => {
       [
         {
           "message": "Required to be an object or null.",
+          "reason": "object null",
+        },
+      ]
+    `);
+
+    rule.messages = {'object null': 'custom'};
+
+    expect(cc(rule, 1)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "object null",
         },
       ]
@@ -104,6 +137,23 @@ describe('rule object', () => {
         {
           "location": "b",
           "message": "Required field cannot be left blank.",
+          "reason": "required",
+        },
+      ]
+    `);
+
+    rule.messages = {required: 'custom'};
+
+    expect(cc(rule, {})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "a",
+          "message": "custom",
+          "reason": "required",
+        },
+        {
+          "location": "b",
+          "message": "custom",
           "reason": "required",
         },
       ]
@@ -314,6 +364,7 @@ describe('rule object', () => {
       },
     };
 
+    expect(cc(rule, {labels: {s: ''}})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`
       [
         {
@@ -326,7 +377,23 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {labels: {s: ''}})).toMatchInlineSnapshot(`[]`);
+
+    rule.properties.labels.messages = {
+      'pattern object min properties': 'custom {minProperties}',
+    };
+
+    expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "minProperties": 1,
+          },
+          "location": "labels",
+          "message": "custom 1",
+          "reason": "pattern object min properties",
+        },
+      ]
+    `);
   });
 
   it('min properties negative', () => {
@@ -349,6 +416,7 @@ describe('rule object', () => {
       },
     };
 
+    expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {labels: {s1: '', s2: ''}})).toMatchInlineSnapshot(`
       [
         {
@@ -361,7 +429,23 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`[]`);
+
+    rule.properties.labels.messages = {
+      'pattern object max properties': 'custom {maxProperties}',
+    };
+
+    expect(cc(rule, {labels: {s1: '', s2: ''}})).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "maxProperties": 1,
+          },
+          "location": "labels",
+          "message": "custom 1",
+          "reason": "pattern object max properties",
+        },
+      ]
+    `);
   });
 
   it('max properties negative', () => {
@@ -385,6 +469,7 @@ describe('rule object', () => {
       },
     };
 
+    expect(cc(rule, {labels: {s2: ''}})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {labels: {}})).toMatchInlineSnapshot(`
       [
         {
@@ -409,7 +494,6 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {labels: {s2: ''}})).toMatchInlineSnapshot(`[]`);
   });
 
   it('max properties greater max', () => {
@@ -435,6 +519,7 @@ describe('rule object', () => {
       },
     };
 
+    expect(cc(rule, {labels: {s: 'x'}})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {labels: {s1: ''}})).toMatchInlineSnapshot(`
       [
         {
@@ -444,7 +529,6 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {labels: {s: 'x'}})).toMatchInlineSnapshot(`[]`);
   });
 
   it('additional properties', () => {
@@ -458,6 +542,8 @@ describe('rule object', () => {
       additionalProperties: false,
     };
 
+    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {name: 'a', age: 45})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {name: 'a', x: '123'})).toMatchInlineSnapshot(`
       [
         {
@@ -476,8 +562,18 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
-    expect(cc(rule, {name: 'a', age: 45})).toMatchInlineSnapshot(`[]`);
+
+    rule.messages = {'object no additional properties': 'custom'};
+
+    expect(cc(rule, {name: 'a', x: '123'})).toMatchInlineSnapshot(`
+      [
+        {
+          "location": "["x"]",
+          "message": "custom",
+          "reason": "object no additional properties",
+        },
+      ]
+    `);
   });
 
   it('additional properties with value property', () => {
@@ -491,6 +587,8 @@ describe('rule object', () => {
       additionalProperties: false,
     };
 
+    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {name: 'a', value: 'abc'})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {name: 'a', x: 1})).toMatchInlineSnapshot(`
       [
         {
@@ -509,8 +607,6 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
-    expect(cc(rule, {name: 'a', value: 'abc'})).toMatchInlineSnapshot(`[]`);
   });
 
   it('additional properties nested with value property', () => {
@@ -530,6 +626,9 @@ describe('rule object', () => {
       required: ['name'],
     };
 
+    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {name: 'a', x: 1})).toMatchInlineSnapshot(`[]`);
+    expect(cc(rule, {name: 'a', value: {a: 1}})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {name: 'a', value: {x: 1}})).toMatchInlineSnapshot(`
       [
         {
@@ -548,9 +647,6 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {name: 'a'})).toMatchInlineSnapshot(`[]`);
-    expect(cc(rule, {name: 'a', x: 1})).toMatchInlineSnapshot(`[]`);
-    expect(cc(rule, {name: 'a', value: {a: 1}})).toMatchInlineSnapshot(`[]`);
   });
 
   it('additional properties with object', () => {
@@ -564,6 +660,7 @@ describe('rule object', () => {
       additionalProperties: false,
     };
 
+    expect(cc(rule, {labels: {s: '', x: 1}})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {x: 1})).toMatchInlineSnapshot(`
       [
         {
@@ -573,7 +670,6 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {labels: {s: '', x: 1}})).toMatchInlineSnapshot(`[]`);
   });
 
   it('additional properties with pattern properties', () => {
@@ -590,6 +686,7 @@ describe('rule object', () => {
       },
     };
 
+    expect(cc(rule, {labels: {s: ''}})).toMatchInlineSnapshot(`[]`);
     expect(cc(rule, {labels: {s: '', x: ''}})).toMatchInlineSnapshot(`
       [
         {
@@ -599,7 +696,6 @@ describe('rule object', () => {
         },
       ]
     `);
-    expect(cc(rule, {labels: {s: ''}})).toMatchInlineSnapshot(`[]`);
   });
 });
 

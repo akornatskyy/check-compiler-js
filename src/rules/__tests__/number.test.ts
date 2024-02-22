@@ -30,6 +30,17 @@ describe('rule number', () => {
         },
       ]
     `);
+
+    rule.messages = {'field not null': 'custom'};
+
+    expect(cc(rule, null)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "field not null",
+        },
+      ]
+    `);
   });
 
   it('number', () => {
@@ -60,6 +71,17 @@ describe('rule number', () => {
         },
       ]
     `);
+
+    rule.messages = {number: 'custom'};
+
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "number",
+        },
+      ]
+    `);
   });
 
   it('number null', () => {
@@ -76,6 +98,17 @@ describe('rule number', () => {
         },
       ]
     `);
+
+    rule.messages = {'number null': 'custom'};
+
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "number null",
+        },
+      ]
+    `);
   });
 
   it('integer', () => {
@@ -86,6 +119,17 @@ describe('rule number', () => {
       [
         {
           "message": "Required to be an integer.",
+          "reason": "integer",
+        },
+      ]
+    `);
+
+    rule.messages = {integer: 'custom'};
+
+    expect(cc(rule, 1.5)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "integer",
         },
       ]
@@ -127,6 +171,21 @@ describe('rule number', () => {
         },
       ]
     `);
+
+    rule.messages = {'number range': 'custom {min} {max}'};
+
+    expect(cc(rule, 11)).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "max": 10,
+            "min": 1,
+          },
+          "message": "custom 1 10",
+          "reason": "number range",
+        },
+      ]
+    `);
   });
 
   it('number positive', () => {
@@ -137,6 +196,17 @@ describe('rule number', () => {
       [
         {
           "message": "Required to be a positive number.",
+          "reason": "number positive",
+        },
+      ]
+    `);
+
+    rule.messages = {'number positive': 'custom'};
+
+    expect(cc(rule, -1)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "number positive",
         },
       ]
@@ -158,6 +228,20 @@ describe('rule number', () => {
         },
       ]
     `);
+
+    rule.messages = {'number min': 'custom {min}'};
+
+    expect(cc(rule, -1)).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "min": 1,
+          },
+          "message": "custom 1",
+          "reason": "number min",
+        },
+      ]
+    `);
   });
 
   it('number max', () => {
@@ -171,6 +255,20 @@ describe('rule number', () => {
             "max": 10,
           },
           "message": "Exceeds maximum allowed value of 10.",
+          "reason": "number max",
+        },
+      ]
+    `);
+
+    rule.messages = {'number max': 'custom {max}'};
+
+    expect(cc(rule, 11)).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "max": 10,
+          },
+          "message": "custom 10",
           "reason": "number max",
         },
       ]

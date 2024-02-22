@@ -6,7 +6,7 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
     throw new Error(`Unexpected "${rule.type}" rule.`);
   }
 
-  const {min, max, items, nullable} = rule;
+  const {min, max, items, nullable, messages} = rule;
   const src: string[] = [];
   if (nullable) {
     src.push(`
@@ -16,7 +16,8 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
     if (value === null) {
       ${builder.addViolation({
         reason: 'field not null',
-        message: 'Required field cannot be null.',
+        message:
+          messages?.['field not null'] ?? 'Required field cannot be null.',
       })}
     }
     else {`);
@@ -28,11 +29,13 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
           nullable
             ? {
                 reason: 'array null',
-                message: 'Required to be an array or null.',
+                message:
+                  messages?.['array null'] ??
+                  'Required to be an array or null.',
               }
             : {
                 reason: 'array',
-                message: 'Required to be an array.',
+                message: messages?.array ?? 'Required to be an array.',
               },
         )}
       }`);
@@ -47,7 +50,8 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length === 0) {
         ${builder.addViolation({
           reason: 'array empty',
-          message: `Required field cannot be left empty.`,
+          message:
+            messages?.['array empty'] ?? 'Required field cannot be left empty.',
         })}
       }`);
     }
@@ -57,7 +61,9 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length < ${min}) {
         ${builder.addViolation({
           reason: 'array min',
-          message: `Required to be a minimum of ${min} items in length.`,
+          message:
+            messages?.['array min']?.replace('{min}', min.toString()) ??
+            `Required to be a minimum of ${min} items in length.`,
           args: {min},
         })}
       }`);
@@ -71,7 +77,9 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length !== ${max}) {
         ${builder.addViolation({
           reason: 'array exact',
-          message: `The array length must be exactly ${max} items.`,
+          message:
+            messages?.['array exact']?.replace('{max}', max.toString()) ??
+            `The array length must be exactly ${max} items.`,
           args: {max},
         })}
       }`);
@@ -80,7 +88,11 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length < ${min} || value.length > ${max}) {
         ${builder.addViolation({
           reason: 'array range',
-          message: `Required to be between ${min} and ${max} items in length.`,
+          message:
+            messages?.['array range']
+              ?.replace('{min}', min.toString())
+              .replace('{max}', max.toString()) ??
+            `Required to be between ${min} and ${max} items in length.`,
           args: {min, max},
         })}
       }`);
@@ -95,7 +107,9 @@ export function buildRuleArray<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length > ${max}) {
         ${builder.addViolation({
           reason: 'array max',
-          message: `Exceeds maximum length of ${max} items.`,
+          message:
+            messages?.['array max']?.replace('{max}', max.toString()) ??
+            `Exceeds maximum length of ${max} items.`,
           args: {max},
         })}
       }`);

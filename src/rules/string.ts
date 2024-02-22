@@ -6,7 +6,7 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
     throw new Error(`Unexpected "${rule.type}" rule.`);
   }
 
-  const {min, max, pattern, nullable} = rule;
+  const {min, max, pattern, nullable, messages} = rule;
   const src: string[] = [];
   if (nullable) {
     src.push(`
@@ -16,7 +16,8 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
     if (value === null) {
       ${builder.addViolation({
         reason: 'field not null',
-        message: 'Required field cannot be null.',
+        message:
+          messages?.['field not null'] ?? 'Required field cannot be null.',
       })}
     }
     else {`);
@@ -28,11 +29,13 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
           nullable
             ? {
                 reason: 'string null',
-                message: 'Required to be a string or null.',
+                message:
+                  messages?.['string null'] ??
+                  'Required to be a string or null.',
               }
             : {
                 reason: 'string',
-                message: 'Required to be a string.',
+                message: messages?.['string'] ?? 'Required to be a string.',
               },
         )}
       }`);
@@ -47,7 +50,9 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length === 0) {
         ${builder.addViolation({
           reason: 'string blank',
-          message: 'Required field cannot be left blank.',
+          message:
+            messages?.['string blank'] ??
+            'Required field cannot be left blank.',
         })}
       }`);
     }
@@ -57,7 +62,9 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length < ${min}) {
         ${builder.addViolation({
           reason: 'string min',
-          message: `Required to be a minimum of ${min} characters in length.`,
+          message:
+            messages?.['string min']?.replace('{min}', min.toString()) ??
+            `Required to be a minimum of ${min} characters in length.`,
           args: {min},
         })}
       }`);
@@ -71,7 +78,9 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length !== ${max}) {
         ${builder.addViolation({
           reason: 'string exact',
-          message: `The length must be exactly ${max} characters.`,
+          message:
+            messages?.['string exact']?.replace('{max}', max.toString()) ??
+            `The length must be exactly ${max} characters.`,
           args: {max},
         })}
       }`);
@@ -80,7 +89,11 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length < ${min} || value.length > ${max}) {
         ${builder.addViolation({
           reason: 'string range',
-          message: `Required to be between ${min} and ${max} characters in length.`,
+          message:
+            messages?.['string range']
+              ?.replace('{min}', min.toString())
+              .replace('{max}', max.toString()) ??
+            `Required to be between ${min} and ${max} characters in length.`,
           args: {min, max},
         })}
       }`);
@@ -95,7 +108,9 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       else if (value.length > ${max}) {
         ${builder.addViolation({
           reason: 'string max',
-          message: `Exceeds maximum length of ${max} characters.`,
+          message:
+            messages?.['string max']?.replace('{max}', max.toString()) ??
+            `Exceeds maximum length of ${max} characters.`,
           args: {max},
         })}
       }`);
@@ -106,7 +121,9 @@ export function buildRuleString<T>(builder: Builder, rule: Rule<T>): string {
       else if (!${pattern}.test(value)) {
         ${builder.addViolation({
           reason: 'string pattern',
-          message: 'Required to match validation pattern.',
+          message:
+            messages?.['string pattern'] ??
+            'Required to match validation pattern.',
         })}
       }`);
   }

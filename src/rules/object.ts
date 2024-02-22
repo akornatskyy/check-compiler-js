@@ -6,7 +6,7 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     throw new Error(`Unexpected "${rule.type}" rule.`);
   }
 
-  const {properties, required, nullable} = rule;
+  const {properties, required, nullable, messages} = rule;
   const src: string[] = [];
   if (nullable) {
     src.push(`
@@ -16,7 +16,8 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     if (value === null) {
       ${builder.addViolation({
         reason: 'object not null',
-        message: 'Required object cannot be null.',
+        message:
+          messages?.['object not null'] ?? 'Required object cannot be null.',
       })}
     }
     else {`);
@@ -29,11 +30,13 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
           nullable
             ? {
                 reason: 'object null',
-                message: 'Required to be an object or null.',
+                message:
+                  messages?.['object null'] ??
+                  'Required to be an object or null.',
               }
             : {
                 reason: 'object',
-                message: 'Required to be an object.',
+                message: messages?.['object'] ?? 'Required to be an object.',
               },
         )}
       }
@@ -60,7 +63,8 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
           ${builder.addViolation({
             location,
             reason: 'required',
-            message: 'Required field cannot be left blank.',
+            message:
+              messages?.['required'] ?? 'Required field cannot be left blank.',
           })}
         }
         `);
@@ -133,8 +137,12 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
     ${builder.addViolation({
       reason: 'pattern object min properties',
       message:
+        messages?.['pattern object min properties']?.replace(
+          '{minProperties}',
+          minProperties.toString(),
+        ) ??
         'The number of object properties must be greater ' +
-        `or equal to ${minProperties}.`,
+          `or equal to ${minProperties}.`,
       args: {minProperties},
     })}
   }
@@ -147,8 +155,12 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
       ${builder.addViolation({
         reason: 'pattern object max properties',
         message:
+          messages?.['pattern object max properties']?.replace(
+            '{maxProperties}',
+            maxProperties.toString(),
+          ) ??
           'Exceeds maximum number of allowed object ' +
-          `properties ${maxProperties}.`,
+            `properties ${maxProperties}.`,
         args: {maxProperties},
       })}
     }
@@ -191,7 +203,9 @@ export function buildRuleObject<T>(builder: Builder, rule: Rule<T>): string {
       src.push(`
           ${builder.addViolation({
             reason: 'object no additional properties',
-            message: `Required to not have any additional properties.`,
+            message:
+              messages?.['object no additional properties'] ??
+              `Required to not have any additional properties.`,
             location: '`[${JSON.stringify(__k)}]`',
           })}`);
     }

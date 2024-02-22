@@ -6,7 +6,7 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
     throw new Error(`Unexpected "${rule.type}" rule.`);
   }
 
-  const {min, max, nullable} = rule;
+  const {min, max, nullable, messages} = rule;
   const src: string[] = [];
   if (nullable) {
     src.push(`
@@ -16,7 +16,8 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
     if (value === null) {
       ${builder.addViolation({
         reason: 'field not null',
-        message: 'Required field cannot be null.',
+        message:
+          messages?.['field not null'] ?? 'Required field cannot be null.',
       })}
     }
     else {`);
@@ -28,11 +29,13 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
           nullable
             ? {
                 reason: 'number null',
-                message: 'Required to be a number or null.',
+                message:
+                  messages?.['number null'] ??
+                  'Required to be a number or null.',
               }
             : {
                 reason: 'number',
-                message: 'Required to be a number.',
+                message: messages?.['number'] ?? 'Required to be a number.',
               },
         )}
       }`);
@@ -42,7 +45,7 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
       else if (value % 1 !== 0) {
         ${builder.addViolation({
           reason: 'integer',
-          message: `Required to be an integer.`,
+          message: messages?.['integer'] ?? 'Required to be an integer.',
         })}
       }`);
   }
@@ -54,7 +57,9 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
       else if (value < ${min}) {
         ${builder.addViolation({
           reason: 'number positive',
-          message: `Required to be a positive number.`,
+          message:
+            messages?.['number positive'] ??
+            'Required to be a positive number.',
         })}
       }`);
       } else {
@@ -62,7 +67,9 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
       else if (value < ${min}) {
         ${builder.addViolation({
           reason: 'number min',
-          message: `Required to be greater or equal to ${min}.`,
+          message:
+            messages?.['number min']?.replace('{min}', min.toString()) ??
+            `Required to be greater or equal to ${min}.`,
           args: {min},
         })}
       }`);
@@ -76,7 +83,11 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
       else if (value < ${min} || value > ${max}) {
         ${builder.addViolation({
           reason: 'number range',
-          message: `The value must fall within the range ${min} - ${max}.`,
+          message:
+            messages?.['number range']
+              ?.replace('{min}', min.toString())
+              .replace('{max}', max.toString()) ??
+            `The value must fall within the range ${min} - ${max}.`,
           args: {min, max},
         })}
       }`);
@@ -86,7 +97,9 @@ export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
     else if (value > ${max}) {
       ${builder.addViolation({
         reason: 'number max',
-        message: `Exceeds maximum allowed value of ${max}.`,
+        message:
+          messages?.['number max']?.replace('{max}', max.toString()) ??
+          `Exceeds maximum allowed value of ${max}.`,
         args: {max},
       })}
     }`);

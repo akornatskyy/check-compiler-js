@@ -30,6 +30,17 @@ describe('rule boolean', () => {
         },
       ]
     `);
+
+    rule.messages = {'field not null': 'custom'};
+
+    expect(cc(rule, null)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "field not null",
+        },
+      ]
+    `);
   });
 
   it('boolean', () => {
@@ -68,6 +79,17 @@ describe('rule boolean', () => {
         },
       ]
     `);
+
+    rule.messages = {'boolean': 'custom'};
+
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "boolean",
+        },
+      ]
+    `);
   });
 
   it('boolean null', () => {
@@ -80,6 +102,17 @@ describe('rule boolean', () => {
       [
         {
           "message": "Required to be a boolean or null.",
+          "reason": "boolean null",
+        },
+      ]
+    `);
+
+    rule.messages = {'boolean null': 'custom'};
+
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "boolean null",
         },
       ]

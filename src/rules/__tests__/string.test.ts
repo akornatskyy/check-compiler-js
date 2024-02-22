@@ -30,6 +30,17 @@ describe('rule string', () => {
         },
       ]
     `);
+
+    rule.messages = {'field not null': 'custom'};
+
+    expect(cc(rule, null)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "field not null",
+        },
+      ]
+    `);
   });
 
   it('string', () => {
@@ -52,6 +63,17 @@ describe('rule string', () => {
         },
       ]
     `);
+
+    rule.messages = {'string': 'custom'};
+
+    expect(cc(rule, 1)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "string",
+        },
+      ]
+    `);
   });
 
   it('string null', () => {
@@ -64,6 +86,17 @@ describe('rule string', () => {
       [
         {
           "message": "Required to be a string or null.",
+          "reason": "string null",
+        },
+      ]
+    `);
+
+    rule.messages = {'string null': 'custom'};
+
+    expect(cc(rule, 1)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "string null",
         },
       ]
@@ -88,6 +121,17 @@ describe('rule string', () => {
         },
       ]
     `);
+
+    rule.messages = {'string blank': 'custom'};
+
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "string blank",
+        },
+      ]
+    `);
   });
 
   it('string blank when min equals one', () => {
@@ -98,6 +142,17 @@ describe('rule string', () => {
       [
         {
           "message": "Required field cannot be left blank.",
+          "reason": "string blank",
+        },
+      ]
+    `);
+
+    rule.messages = {'string blank': 'custom'};
+
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "string blank",
         },
       ]
@@ -121,6 +176,20 @@ describe('rule string', () => {
             "max": 2,
           },
           "message": "The length must be exactly 2 characters.",
+          "reason": "string exact",
+        },
+      ]
+    `);
+
+    rule.messages = {'string exact': 'custom {max}'};
+
+    expect(cc(rule, 'a')).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "max": 2,
+          },
+          "message": "custom 2",
           "reason": "string exact",
         },
       ]
@@ -156,6 +225,21 @@ describe('rule string', () => {
         },
       ]
     `);
+
+    rule.messages = {'string range': 'custom {min} {max}'};
+
+    expect(cc(rule, 'a')).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "max": 4,
+            "min": 2,
+          },
+          "message": "custom 2 4",
+          "reason": "string range",
+        },
+      ]
+    `);
   });
 
   it('string min', () => {
@@ -169,6 +253,20 @@ describe('rule string', () => {
             "min": 2,
           },
           "message": "Required to be a minimum of 2 characters in length.",
+          "reason": "string min",
+        },
+      ]
+    `);
+
+    rule.messages = {'string min': 'custom {min}'};
+
+    expect(cc(rule, 'a')).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "min": 2,
+          },
+          "message": "custom 2",
           "reason": "string min",
         },
       ]
@@ -196,6 +294,20 @@ describe('rule string', () => {
         },
       ]
     `);
+
+    rule.messages = {'string max': 'custom {max}'};
+
+    expect(cc(rule, 'abcd')).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "max": 3,
+          },
+          "message": "custom 3",
+          "reason": "string max",
+        },
+      ]
+    `);
   });
 
   it('string pattern', () => {
@@ -206,6 +318,17 @@ describe('rule string', () => {
       [
         {
           "message": "Required to match validation pattern.",
+          "reason": "string pattern",
+        },
+      ]
+    `);
+
+    rule.messages = {'string pattern': 'custom'};
+
+    expect(cc(rule, '1234')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "string pattern",
         },
       ]

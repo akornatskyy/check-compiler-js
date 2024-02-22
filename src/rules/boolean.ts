@@ -6,7 +6,7 @@ export function buildRuleBoolean<T>(builder: Builder, rule: Rule<T>): string {
     throw new Error(`Unexpected "${rule.type}" rule.`);
   }
 
-  const {nullable} = rule;
+  const {nullable, messages} = rule;
   const src: string[] = [];
   if (nullable) {
     src.push(`
@@ -16,7 +16,8 @@ export function buildRuleBoolean<T>(builder: Builder, rule: Rule<T>): string {
     if (value === null) {
       ${builder.addViolation({
         reason: 'field not null',
-        message: 'Required field cannot be null.',
+        message:
+          messages?.['field not null'] ?? 'Required field cannot be null.',
       })}
     }
     else {`);
@@ -28,11 +29,13 @@ export function buildRuleBoolean<T>(builder: Builder, rule: Rule<T>): string {
           nullable
             ? {
                 reason: 'boolean null',
-                message: 'Required to be a boolean or null.',
+                message:
+                  messages?.['boolean null'] ??
+                  'Required to be a boolean or null.',
               }
             : {
                 reason: 'boolean',
-                message: 'Required to be a boolean.',
+                message: messages?.boolean ?? 'Required to be a boolean.',
               },
         )}
       }

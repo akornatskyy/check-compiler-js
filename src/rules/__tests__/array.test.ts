@@ -34,6 +34,17 @@ describe('rule array', () => {
         },
       ]
     `);
+
+    rule.messages = {'field not null': 'custom'};
+
+    expect(cc(rule, null)).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "field not null",
+        },
+      ]
+    `);
   });
 
   it('array', () => {
@@ -56,6 +67,17 @@ describe('rule array', () => {
         },
       ]
     `);
+
+    rule.messages = {'array': 'custom'};
+
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
+          "reason": "array",
+        },
+      ]
+    `);
   });
 
   it('array null', () => {
@@ -72,6 +94,17 @@ describe('rule array', () => {
       [
         {
           "message": "Required to be an array or null.",
+          "reason": "array null",
+        },
+      ]
+    `);
+
+    rule.messages = {'array null': 'custom'};
+
+    expect(cc(rule, '')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "array null",
         },
       ]
@@ -100,6 +133,17 @@ describe('rule array', () => {
       [
         {
           "message": "Required field cannot be left empty.",
+          "reason": "array empty",
+        },
+      ]
+    `);
+
+    rule.messages = {'array empty': 'custom'};
+
+    expect(cc(rule, [])).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "custom",
           "reason": "array empty",
         },
       ]
@@ -133,6 +177,20 @@ describe('rule array', () => {
             "max": 2,
           },
           "message": "The array length must be exactly 2 items.",
+          "reason": "array exact",
+        },
+      ]
+    `);
+
+    rule.messages = {'array exact': 'custom {max}'};
+
+    expect(cc(rule, [1])).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "max": 2,
+          },
+          "message": "custom 2",
           "reason": "array exact",
         },
       ]
@@ -173,6 +231,21 @@ describe('rule array', () => {
         },
       ]
     `);
+
+    rule.messages = {'array range': 'custom {min} {max}'};
+
+    expect(cc(rule, [1])).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "max": 4,
+            "min": 2,
+          },
+          "message": "custom 2 4",
+          "reason": "array range",
+        },
+      ]
+    `);
   });
 
   it('array min', () => {
@@ -190,6 +263,20 @@ describe('rule array', () => {
             "min": 2,
           },
           "message": "Required to be a minimum of 2 items in length.",
+          "reason": "array min",
+        },
+      ]
+    `);
+
+    rule.messages = {'array min': 'custom {min}'};
+
+    expect(cc(rule, [1])).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "min": 2,
+          },
+          "message": "custom 2",
           "reason": "array min",
         },
       ]
@@ -221,6 +308,20 @@ describe('rule array', () => {
             "max": 3,
           },
           "message": "Exceeds maximum length of 3 items.",
+          "reason": "array max",
+        },
+      ]
+    `);
+
+    rule.messages = {'array max': 'custom {max}'};
+
+    expect(cc(rule, [1, 2, 3, 4])).toMatchInlineSnapshot(`
+      [
+        {
+          "args": {
+            "max": 3,
+          },
+          "message": "custom 3",
           "reason": "array max",
         },
       ]
