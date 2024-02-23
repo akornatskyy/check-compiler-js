@@ -27,7 +27,13 @@ import {compile, Rule, Violation} from 'check-compiler';
 
 // define
 const id: Rule<string> = {
-  type: 'string', min: 8, max: 8, pattern: /^[a-z]+$/
+  type: 'string',
+  min: 8,
+  max: 8,
+  pattern: /^[a-z]+$/,
+  messages: {
+    'string pattern': 'Required to be lowercase alpha only.',
+  },
 };
 
 // compile

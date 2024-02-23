@@ -6,6 +6,9 @@ const id: Rule<string> = {
   min: 8,
   max: 8,
   pattern: /^[a-z]+$/,
+  messages: {
+    'string pattern': 'Required to be lowercase alpha only.',
+  },
 };
 const name: Rule<string> = {type: 'string', min: 1, max: 63};
 const key = name;
@@ -121,6 +124,15 @@ const updateInstanceInput: Rule<UpdateInstanceInput> = {
 describe('rules playground', () => {
   it('id', () => {
     expect(cc(id, 'abcdefgh')).toMatchInlineSnapshot(`[]`);
+
+    expect(cc(id, 'aBcdefgh')).toMatchInlineSnapshot(`
+      [
+        {
+          "message": "Required to be lowercase alpha only.",
+          "reason": "string pattern",
+        },
+      ]
+    `);
   });
 
   it('enum', () => {
