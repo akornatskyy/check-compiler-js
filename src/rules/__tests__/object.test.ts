@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable unicorn/no-null */
 /* eslint-disable unicorn/no-useless-undefined */
 import {compile} from '../..';
