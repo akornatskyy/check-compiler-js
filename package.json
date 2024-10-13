@@ -1,6 +1,6 @@
 {
   "name": "check-compiler",
-  "version": "1.3.9",
+  "version": "1.3.10",
   "description": "A typescript-first schema rule compiler and validation library.",
   "author": "Andriy Kornatskyy",
   "license": "MIT",
