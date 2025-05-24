@@ -5,13 +5,13 @@
   "author": "Andriy Kornatskyy",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc -p tsconfig.esm.json",
     "clean": "rimraf --glob tsconfig.tsbuildinfo dist *.tgz",
     "lint": "eslint . --format stylish --ext .ts",
     "test": "jest"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "types": "./dist/types/index.d.ts",
   "sideEffects": false,
   "homepage": "https://github.com/akornatskyy/check-compiler-js",
   "bugs": {
@@ -33,10 +33,13 @@
   },
   "files": [
     "dist",
-    "!dist/**/__tests__"
+    "!dist/**/__tests__",
+    "!*.tsbuildinfo"
   ],
   "exports": {
-    ".": "./dist/index.js"
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js",
+    "types": "./dist/types/index.d.ts"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
