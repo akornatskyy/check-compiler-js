@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc && tsc -p tsconfig.esm.json",
-    "clean": "rimraf --glob tsconfig.tsbuildinfo dist *.tgz",
-    "lint": "eslint . --format stylish --ext .ts",
+    "clean": "rm -rf tsconfig.tsbuildinfo dist *.tgz",
+    "lint": "eslint . --format stylish",
     "test": "jest"
   },
   "main": "dist/cjs/index.js",
@@ -43,21 +43,21 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.5.2",
-    "@typescript-eslint/eslint-plugin": "^8.44.1",
-    "@typescript-eslint/parser": "^8.44.1",
-    "eslint": "^8.57.1",
+    "@types/node": "^25.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "eslint": "^9.39.2",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-jest": "^29.12.1",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-prefer-arrow": "^1.2.3",
-    "eslint-plugin-unicorn": "^56.0.1",
+    "eslint-plugin-unicorn": "^62.0.0",
     "jest": "^30.2.0",
-    "rimraf": "^6.0.1",
-    "ts-jest": "^29.4.4",
-    "typescript": "^5.9.2"
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.9.3"
   },
   "prettier": {
     "singleQuote": true,
@@ -66,46 +66,22 @@
     "printWidth": 80
   },
   "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.ts"
+    ],
     "collectCoverageFrom": [
       "src/**/*.ts",
-      "!**/__tests__",
-      "!**/dist"
+      "!src/**/__tests__/**",
+      "!src/**/*.d.ts"
     ],
-    "modulePathIgnorePatterns": [
-      "dist",
-      "tsconfig.*"
-    ],
-    "testPathIgnorePatterns": [
-      "node_modules/"
-    ],
-    "transform": {
-      "\\.ts$": "ts-jest"
-    }
-  },
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint",
-      "no-null"
-    ],
-    "ignorePatterns": [
-      "dist/",
-      "node_modules/"
-    ],
-    "extends": [
-      "eslint:recommended",
-      "google",
-      "plugin:import/errors",
-      "plugin:import/warnings",
-      "plugin:import/typescript",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:unicorn/recommended",
-      "prettier"
-    ],
-    "rules": {
-      "require-jsdoc": "off",
-      "unicorn/prevent-abbreviations": "off"
-    }
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   }
 }

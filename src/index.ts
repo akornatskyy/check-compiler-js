@@ -1,11 +1,11 @@
 import {DefaultBuilder} from './builder';
-import {Check, Compiler} from './compiler';
+import {type Check, Compiler} from './compiler';
 import {arrayRuleBuilder} from './rules/array';
 import {booleanRuleBuilder} from './rules/boolean';
 import {numberRuleBuilder} from './rules/number';
 import {objectRuleBuilder} from './rules/object';
 import {stringRuleBuilder} from './rules/string';
-import {Rule} from './types';
+import {type Rule} from './types';
 
 export {Check} from './compiler';
 export {Rule, Violation} from './types';

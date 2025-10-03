@@ -1,5 +1,5 @@
 import {compile} from '../..';
-import {Rule, Violation} from '../../types';
+import {type Rule, type Violation} from '../../types';
 
 const id: Rule<string> = {
   type: 'string',
@@ -194,13 +194,13 @@ describe('rules playground', () => {
         images: ['alpine:latest'],
         labels: [{key: 'kernel/release', value: '6.1.0-amd64'}],
       }),
-    );
+    ).toMatchInlineSnapshot(`[]`);
   });
 });
 
 function cc<T>(rule: Rule<T>, input: T) {
   const check = compile(rule);
   const violations: Violation[] = [];
-  check(input as T, violations);
+  check(input, violations);
   return violations;
 }

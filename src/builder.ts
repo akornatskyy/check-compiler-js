@@ -1,4 +1,4 @@
-import {Rule, Violation} from './types';
+import {type Rule, type Violation} from './types';
 
 export interface RuleBuilder {
   types: string[];

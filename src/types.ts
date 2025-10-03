@@ -74,8 +74,8 @@ export type RequiredProperties<T> = keyof {
   [K in keyof T as string extends K
     ? never
     : undefined extends T[K]
-    ? never
-    : K]: K;
+      ? never
+      : K]: K;
 };
 
 export type Schema<T> = {
@@ -116,14 +116,14 @@ export type Nullable<T> = null extends T
 export type Rule<T> = (T extends boolean
   ? RuleBoolean
   : T extends number
-  ? RuleNumber
-  : T extends string
-  ? RuleString
-  : T extends readonly unknown[]
-  ? RuleArray<T[0]>
-  : T extends object
-  ? Schema<T>
-  : never) &
+    ? RuleNumber
+    : T extends string
+      ? RuleString
+      : T extends readonly unknown[]
+        ? RuleArray<T[0]>
+        : T extends object
+          ? Schema<T>
+          : never) &
   Nullable<T>;
 
 export type Violation = {

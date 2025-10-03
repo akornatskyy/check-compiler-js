@@ -1,8 +1,7 @@
-/* eslint-disable unicorn/no-null */
 /* eslint-disable unicorn/no-useless-undefined */
 import {compile} from '../..';
-import {Builder} from '../../builder';
-import {Rule, Violation} from '../../types';
+import {type Builder} from '../../builder';
+import {type Rule, type Violation} from '../../types';
 import {buildRuleArray} from '../array';
 
 describe('rule array', () => {
@@ -68,7 +67,7 @@ describe('rule array', () => {
       ]
     `);
 
-    rule.messages = {'array': 'custom'};
+    rule.messages = {array: 'custom'};
 
     expect(cc(rule, '')).toMatchInlineSnapshot(`
       [

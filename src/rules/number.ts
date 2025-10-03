@@ -1,5 +1,5 @@
-import {Builder, RuleBuilder} from '../builder';
-import {Rule} from '../types';
+import {type Builder, type RuleBuilder} from '../builder';
+import {type Rule} from '../types';
 
 export function buildRuleNumber<T>(builder: Builder, rule: Rule<T>): string {
   if (rule.type !== 'number' && rule.type !== 'integer') {
