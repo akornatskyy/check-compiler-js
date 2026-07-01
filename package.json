@@ -53,7 +53,7 @@
     "eslint-plugin-jest": "^29.15.3",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-prefer-arrow": "^1.2.3",
-    "eslint-plugin-unicorn": "^62.0.0",
+    "eslint-plugin-unicorn": "^70.0.0",
     "jest": "^30.4.2",
     "ts-jest": "^29.4.11",
     "typescript": "^5.9.3"
